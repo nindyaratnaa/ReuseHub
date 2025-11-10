@@ -27,7 +27,7 @@
                     <li><a href="{{ url('/about') }}" class="text-gray-500 hover:text-green-600 transition-colors text-sm">Text</a></li>
                     <li><a href="{{ url('/about') }}" class="text-gray-500 hover:text-green-600 transition-colors text-sm">Text</a></li>
                     <li><a href="https://careers.example.com" target="_blank" rel="noopener noreferrer"
-                        class="text-gray-500 hover:text-green-600 transition-colors text-sm">Careers</a></li>
+                        class="text-gray-500 hover:text-green-600 transition-colors text-sm">Text</a></li>
                 </ul>
             </div>
         </div>
