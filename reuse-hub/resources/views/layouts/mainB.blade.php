@@ -6,9 +6,9 @@
         <title>@yield('title', 'Judul Default')</title>
         @vite('resources/css/app.css')
     </head>
-    <body class="bg-gray-900 text-white">
+    <body class="mt-16">
         {{-- Header --}}
-        @include('partials.header')
+        @include('partials.headerB')
 
         {{-- Konten halaman --}}
         <main class="p-6">
