@@ -11,7 +11,7 @@
         @include('partials.header')
 
         {{-- Konten halaman --}}
-        <main class="p-6">
+        <main>
         @yield('content')
         </main>
 

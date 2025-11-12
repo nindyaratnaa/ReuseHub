@@ -33,8 +33,8 @@
     <div id="mobileNav"
         class="fixed top-0 right-0 w-64 h-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-30">
         <div class="flex flex-col p-6 space-y-4">
-            <button id="closeNav" class="self-end mb-4 hover:text-green-600 dark:hover:text-green-500">✕</button>
-            <a href="{{ url('/Beranda') }}" class=" text-center dark:text-green-700 hover:text-green-600 transition">Masuk</a>
+            <button id="closeNav" class="self-end mb-4 hover:text-green-600">✕</button>
+            <a href="{{ url('/Beranda') }}" class=" text-center hover:text-green-600 transition">Masuk</a>
             <a href="{{ url('/Beranda') }}" class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg text-center">Daftar</a>
         </div>
     </div>

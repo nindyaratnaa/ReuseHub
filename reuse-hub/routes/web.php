@@ -17,3 +17,8 @@ Route::get('/daftar', function () {
 Route::get('/beranda', function () {
     return view('beranda');
 });
+
+
+Route::get('/beranda1', function () {
+    return view('beranda1');
+});
