@@ -50,4 +50,8 @@ class PageController extends Controller
     {
         return view('profil');
     }
+    public function rating()
+    {
+        return view('rating');
+    }
 }

@@ -24,6 +24,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profil', [PageController::class, 'profil']);
     Route::get('/chat', [PageController::class, 'chat']);
     Route::get('/pesan', [PageController::class, 'pesan']);
+        Route::get('/rating', [PageController::class, 'rating']);
+
 });
 
 // Admin Routes
