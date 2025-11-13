@@ -131,23 +131,6 @@
                         </div>
                     </div>
 
-                    <!-- Barang yang Diinginkan -->
-                    <div class="border-t pt-8">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Barang yang Diinginkan (Opsional)</h3>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="barangDiinginkan" class="block text-sm font-medium text-gray-700 mb-2">Jenis Barang</label>
-                                <input type="text" id="barangDiinginkan" name="barangDiinginkan" placeholder="Contoh: Laptop, Buku Programming, dll" 
-                                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none">
-                            </div>
-                            <div>
-                                <label for="catatanTambahan" class="block text-sm font-medium text-gray-700 mb-2">Catatan Tambahan</label>
-                                <input type="text" id="catatanTambahan" name="catatanTambahan" placeholder="Spesifikasi khusus atau preferensi lainnya" 
-                                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none">
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Submit Buttons -->
                     <div class="flex flex-col sm:flex-row gap-4 pt-6">
                         <button type="submit" 
