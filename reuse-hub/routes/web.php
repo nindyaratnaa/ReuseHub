@@ -1,40 +1,48 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageController;
 
-Route::get('/', function () {
-    return view('app');
-});
-
-Route::get('/B', function () {
-    return view('welcome');
-});
-
-Route::get('/daftar', function () {
-    return view('daftar');
-});
-
-Route::get('/beranda', function () {
-    return view('beranda');
-});
-
-
-Route::get('/beranda1', function () {
-    return view('beranda1');
-});
-
-Route::get('/tentang', function () {
-    return view('tentang');
-});
-
-Route::get('/masuk', function () {
-    return view('masuk');
-});
-
-Route::get('/tukar', function () {
-    return view('tukar');
-});
-
-Route::get('/tukardetail/{id}', function ($id) {
-    return view('tukardetail');
-});
+Route::get('/', [
+    PageController::class,
+    'beranda1'
+]);
+Route::get('/beranda', [
+    PageController::class,
+    'beranda'
+]);
+Route::get('/chat', [
+    PageController::class,
+    'chat'
+]);
+Route::get('/daftar', [
+    PageController::class,
+    'daftar'
+]);
+Route::get('/masuk', [
+    PageController::class,
+    'masuk'
+]);
+Route::get('/pesan', [
+    PageController::class,
+    'pesan'
+]);
+Route::get('/tentang', [
+    PageController::class,
+    'tentang'
+]);
+Route::get('/tukar', [
+    PageController::class,
+    'tukar'
+]);
+Route::get('/tukardetail', [
+    PageController::class,
+    'tukardetail'
+]);
+Route::get('/unggah', [
+    PageController::class,
+    'unggah'
+]);
+Route::get('/profil', [
+    PageController::class,
+    'profil'
+]);
