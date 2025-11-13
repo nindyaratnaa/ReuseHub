@@ -36,7 +36,7 @@
                                     <input id="email" type="text" name="nama_lengkap" placeholder="Masukkan nama lengkap"
                                     class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none transition-all duration-200" required>
                                 </div>
-                                <p id="emailError" class="text-red-500 text-sm mt-1 hidden">Masukkan nama lengkap uang benar</p>
+                                <p id="emailError" class="text-red-500 text-sm mt-1 hidden">Masukkan nama lengkap yang benar</p>
                         </div>
 
                         <!-- Email -->
