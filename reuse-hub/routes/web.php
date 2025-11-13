@@ -3,11 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('app');
-});
-
-Route::get('/B', function () {
-    return view('welcome');
+    return view('beranda');
 });
 
 Route::get('/daftar', function () {
@@ -37,4 +33,12 @@ Route::get('/tukar', function () {
 
 Route::get('/tukardetail/{id}', function ($id) {
     return view('tukardetail');
+});
+
+Route::get('/unggah', function () {
+    return view('unggah');
+});
+
+Route::get('/error', function () {
+    return view('error');
 });
