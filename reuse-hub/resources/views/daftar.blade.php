@@ -64,16 +64,17 @@
                     <p class="text-gray-500 mt-2">Jadilah Pahlawan Lingkungan</p>
                 </div>
 
-                <form id="signupForm" class="space-y-6">
+                <form id="signupForm" class="space-y-6" method="POST" action="/daftar">
+                    @csrf
                     <div class="space-y-4">
                       <!-- Email -->
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Nama lengkap</label>
+                            <label for="nama_lengkap" class="block text-sm font-medium text-gray-700 mb-1">Nama lengkap</label>
                                 <div class="relative">
-                                    <input id="email" type="text" name="nama_lengkap" placeholder="Masukkan nama lengkap"
+                                    <input id="nama_lengkap" type="text" name="nama_lengkap" placeholder="Masukkan nama lengkap"
                                     class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none transition-all duration-200" required>
                                 </div>
-                                <p id="emailError" class="text-red-500 text-sm mt-1 hidden">Masukkan nama lengkap yang benar</p>
+                                <p id="namaError" class="text-red-500 text-sm mt-1 hidden">Masukkan nama lengkap yang benar</p>
                         </div>
 
                         <!-- Email -->
@@ -98,9 +99,9 @@
 
                         <!-- Confirm Password -->
                         <div>
-                            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi kata sandi</label>
+                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi kata sandi</label>
                             <div class="relative">
-                                <input id="confirmPassword" type="password" name="confirmPassword" placeholder="Konfirmasi kata sandi"
+                                <input id="password_confirmation" type="password" name="password_confirmation" placeholder="Konfirmasi kata sandi"
                                 class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none transition-all duration-200" required>
                             </div>
                             <p id="confirmError" class="text-red-500 text-sm mt-1 hidden">Kata sandi tidak cocok</p>
@@ -135,7 +136,7 @@
 
                     <p class="mt-6 text-center text-sm text-gray-600">
                         Sudah memiliki akun?
-                        <a href="/login.html" class="text-green-600 hover:text-green-700 font-medium">
+                        <a href="/masuk" class="text-green-600 hover:text-green-700 font-medium">
                             Masuk
                         </a>
                     </p>
@@ -147,7 +148,54 @@
     <!-- JS validation -->
     <script>
         const form = document.getElementById("signupForm");
+        const namaError = document.getElementById("namaError");
         const emailError = document.getElementById("emailError");
+        const passwordError = document.getElementById("passwordError");
+        const confirmError = document.getElementById("confirmError");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            // Reset errors
+            document.querySelectorAll('[id$="Error"]').forEach(el => el.classList.add('hidden'));
+            
+            // Show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Mendaftar...';
+
+            try {
+                const response = await fetch('/daftar', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Registrasi berhasil! Anda akan diarahkan ke beranda.');
+                    window.location.href = data.redirect;
+                } else {
+                    // Show validation errors
+                    if (data.errors) {
+                        if (data.errors.nama_lengkap) namaError.classList.remove('hidden');
+                        if (data.errors.email) emailError.classList.remove('hidden');
+                        if (data.errors.password) passwordError.classList.remove('hidden');
+                    }
+                }
+            } catch (error) {
+                alert('Terjadi kesalahan. Silakan coba lagi.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Buat akun';
+            }
+        });
+    </script>tById("emailError");
         const passwordError = document.getElementById("passwordError");
         const confirmError = document.getElementById("confirmError");
 

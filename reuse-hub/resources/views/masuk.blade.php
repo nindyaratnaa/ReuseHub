@@ -64,7 +64,8 @@
                     <p class="text-gray-500 mt-2">Selamat datang kembali!</p>
                 </div>
 
-                <form id="loginForm" class="space-y-6">
+                <form id="loginForm" class="space-y-6" method="POST" action="/masuk">
+                    @csrf
                     <div class="space-y-4">
                         <!-- Email/Username -->
                         <div>
@@ -144,30 +145,42 @@
         const emailUsernameError = document.getElementById("emailUsernameError");
         const passwordError = document.getElementById("passwordError");
 
-        form.addEventListener("submit", (e) => {
+        form.addEventListener("submit", async (e) => {
             e.preventDefault();
 
-            const emailUsername = form.emailUsername.value.trim();
-            const password = form.password.value.trim();
-
-            let valid = true;
-
+            const formData = new FormData(form);
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            // Reset errors
             emailUsernameError.classList.add("hidden");
             passwordError.classList.add("hidden");
+            
+            // Show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Masuk...';
 
-            if (!emailUsername) {
-                emailUsernameError.classList.remove("hidden");
-                valid = false;
-            }
+            try {
+                const response = await fetch('/masuk', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
 
-            if (!password) {
-                passwordError.classList.remove("hidden");
-                valid = false;
-            }
+                const data = await response.json();
 
-            if (valid) {
-                alert("Login berhasil!");
-                // Redirect atau proses login di sini
+                if (data.success) {
+                    alert('Login berhasil! Anda akan diarahkan ke beranda.');
+                    window.location.href = data.redirect;
+                } else {
+                    alert(data.message || 'Email/username atau password salah.');
+                }
+            } catch (error) {
+                alert('Terjadi kesalahan. Silakan coba lagi.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Masuk';
             }
         });
     </script>
