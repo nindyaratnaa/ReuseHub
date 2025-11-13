@@ -18,7 +18,7 @@
 
     <!-- Profile Container -->
     <section class="py-8 bg-gray-50 min-h-screen">
-        <div class="max-w-4xl mx-auto px-6">
+        <div class="max-w-7xl mx-auto px-6">
             
             <!-- Profile Header -->
             <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
@@ -26,7 +26,7 @@
                     <!-- Profile Picture -->
                     <div class="relative">
                         <div class="w-32 h-32 bg-gray-200 rounded-full overflow-hidden">
-                            <img id="profileImage" src="https://yt3.googleusercontent.com/ytc/AIdro_kbZhfErZq5YBHcq8tNEZ7dstZf9vJ8NVmf5tlhew=s900-c-k-c0x00ffffff-no-rj" 
+                            <img id="profileImage" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" 
                                  alt="Profile" class="w-full h-full object-cover">
                         </div>
                         <button onclick="document.getElementById('fileInput').click()" 
@@ -55,11 +55,8 @@
                 </div>
             </div>
 
-            <div class="grid lg:grid-cols-3 gap-6">
-                
-                <!-- Profile Form -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white rounded-lg shadow-sm p-6">
+            <!-- Profile Form -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-xl font-semibold text-gray-900">Informasi Profil</h2>
                             <button id="editBtn" onclick="toggleEdit()" 
@@ -78,14 +75,7 @@
                                     <input type="text" id="fullName" value="Jerome Polin" disabled
                                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-50">
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin</label>
-                                    <select id="gender" disabled
-                                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-50">
-                                        <option value="laki-laki" selected>Laki-laki</option>
-                                        <option value="perempuan">Perempuan</option>
-                                    </select>
-                                </div>
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                                     <input type="email" id="email" value="jerome.polin@email.com" disabled
@@ -119,36 +109,6 @@
                                 </button>
                             </div>
                         </form>
-                    </div>
-                </div>
-
-                <!-- Sidebar -->
-                <div class="space-y-6">
-                    
-
-
-                    <!-- Statistics -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Statistik</h3>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600">Total Pertukaran</span>
-                                <span class="font-semibold text-gray-900">47</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600">Rating</span>
-                                <span class="font-semibold text-gray-900">4.9 ⭐</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600">Barang Aktif</span>
-                                <span class="font-semibold text-gray-900">8</span>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                </div>
             </div>
         </div>
     </section>
