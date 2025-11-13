@@ -121,11 +121,12 @@
                 <!-- Message Input -->
                 <div class="border-t border-gray-200 p-4">
                     <div class="flex items-end gap-3">
-                        <button class="p-2 text-gray-500 hover:text-gray-700 transition">
+                        <button onclick="document.getElementById('fileUpload').click()" class="p-2 text-gray-500 hover:text-gray-700 transition">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
                             </svg>
                         </button>
+                        <input type="file" id="fileUpload" accept="image/*,application/pdf,.doc,.docx" class="hidden" onchange="handleFileUpload(event)">
                         <div class="flex-1">
                             <textarea id="messageInput" 
                                       placeholder="Ketik pesan Anda di sini..." 
@@ -211,10 +212,14 @@
         let response = 'Terima kasih atas pesannya! Saya akan segera merespons.';
         
         // Find appropriate response
-        for (let key in responses) {
-            if (userMessage.toLowerCase().includes(key)) {
-                response = responses[key];
-                break;
+        if (userMessage === 'file') {
+            response = 'Terima kasih sudah mengirim file! Saya akan melihatnya dan memberikan tanggapan.';
+        } else {
+            for (let key in responses) {
+                if (userMessage.toLowerCase().includes(key)) {
+                    response = responses[key];
+                    break;
+                }
             }
         }
         
@@ -251,6 +256,72 @@
         this.style.height = 'auto';
         this.style.height = Math.min(this.scrollHeight, 120) + 'px';
     });
+
+    // Handle file upload
+    function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // Clear welcome message on first message
+            if (messageCount === 0) {
+                chatMessages.innerHTML = '';
+            }
+            
+            // Create file message
+            const fileMessageDiv = document.createElement('div');
+            fileMessageDiv.className = 'flex justify-end';
+            
+            let fileContent = '';
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    fileContent = `
+                        <div class="max-w-xs lg:max-w-md">
+                            <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
+                                <img src="${e.target.result}" alt="Uploaded image" class="w-full h-auto rounded mb-2">
+                                <p class="text-sm">📷 Foto dikirim</p>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1 text-right">Baru saja</p>
+                        </div>
+                    `;
+                    fileMessageDiv.innerHTML = fileContent;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                fileContent = `
+                    <div class="max-w-xs lg:max-w-md">
+                        <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-medium">${file.name}</p>
+                                    <p class="text-xs opacity-75">${(file.size / 1024).toFixed(1)} KB</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1 text-right">Baru saja</p>
+                    </div>
+                `;
+                fileMessageDiv.innerHTML = fileContent;
+            }
+            
+            chatMessages.appendChild(fileMessageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Simulate response
+            setTimeout(() => {
+                addBotResponse('file');
+            }, 1000 + Math.random() * 2000);
+            
+            messageCount++;
+            
+            // Clear file input
+            event.target.value = '';
+        }
+    }
 </script>
 
 @endsection
