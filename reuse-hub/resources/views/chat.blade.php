@@ -145,54 +145,7 @@
                 </div>
             </div>
 
-            <!-- Exchange Proposal Card -->
-            <div class="mt-6 bg-white rounded-lg shadow-sm p-6" id="exchangeProposal" style="display: none;">
-                <div class="flex items-center gap-2 mb-4">
-                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                    </svg>
-                    <h3 class="text-lg font-semibold text-gray-900">Proposal Pertukaran</h3>
-                </div>
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Your Item -->
-                    <div class="border border-gray-200 rounded-lg p-4">
-                        <h4 class="font-medium text-gray-900 mb-3">Barang Anda</h4>
-                        <div class="flex items-center gap-3">
-                            <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=80&h=80&fit=crop" 
-                                 alt="Jaket Denim" class="w-16 h-16 object-cover rounded-lg">
-                            <div>
-                                <h5 class="font-semibold text-gray-900">Jaket Denim Vintage</h5>
-                                <p class="text-sm text-gray-600">Yogyakarta • Baik</p>
-                                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">Pakaian</span>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Their Item -->
-                    <div class="border border-gray-200 rounded-lg p-4">
-                        <h4 class="font-medium text-gray-900 mb-3">Barang Mereka</h4>
-                        <div class="flex items-center gap-3">
-                            <img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=80&h=80&fit=crop" 
-                                 alt="iPhone 12 Pro" class="w-16 h-16 object-cover rounded-lg">
-                            <div>
-                                <h5 class="font-semibold text-gray-900">iPhone 12 Pro</h5>
-                                <p class="text-sm text-gray-600">Jakarta Selatan • Seperti Baru</p>
-                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Elektronik</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex gap-3 mt-6">
-                    <button class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition">
-                        Setuju Tukar
-                    </button>
-                    <button class="flex-1 border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-3 rounded-lg transition">
-                        Nego Ulang
-                    </button>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -201,14 +154,6 @@
 
     function sendQuickMessage(message) {
         sendMessage(message);
-        
-        // Show exchange proposal after exchange request
-        if (message.includes('menukar barang')) {
-            setTimeout(() => {
-                document.getElementById('exchangeProposal').style.display = 'block';
-                document.getElementById('exchangeProposal').scrollIntoView({ behavior: 'smooth' });
-            }, 1000);
-        }
     }
 
     function sendMessage(customMessage = null) {
