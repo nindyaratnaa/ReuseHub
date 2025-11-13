@@ -46,4 +46,8 @@ class PageController extends Controller
     {
         return view('unggah');
     }
+    public function profil()
+    {
+        return view('profil');
+    }
 }

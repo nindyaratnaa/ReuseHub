@@ -42,3 +42,7 @@ Route::get('/unggah', [
     PageController::class,
     'unggah'
 ]);
+Route::get('/profil', [
+    PageController::class,
+    'profil'
+]);
