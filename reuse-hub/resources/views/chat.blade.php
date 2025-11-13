@@ -65,8 +65,17 @@
                             <h4 class="font-semibold text-gray-900">iPhone 12 Pro</h4>
                             <p class="text-sm text-gray-600">Jakarta Selatan • Seperti Baru</p>
                         </div>
-                        <div class="text-right">
+                        <div class="text-right space-y-2">
                             <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">Elektronik</span>
+                            <div>
+                                <button onclick="window.location.href='/rating'" 
+                                        class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm transition flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Transaksi Selesai
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
