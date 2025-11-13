@@ -30,3 +30,11 @@ Route::get('/tentang', function () {
 Route::get('/masuk', function () {
     return view('masuk');
 });
+
+Route::get('/tukar', function () {
+    return view('tukar');
+});
+
+Route::get('/tukardetail/{id}', function ($id) {
+    return view('tukardetail');
+});

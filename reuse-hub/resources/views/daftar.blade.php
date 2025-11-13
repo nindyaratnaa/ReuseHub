@@ -1,6 +1,6 @@
 @extends('layouts.mainB')
 
-@section('title', 'Daftar')
+@section('title', 'Daftar - ReuseHub')
 
 @section('content')  
     <div class="w-full md:flex min-h-[calc(100vh-4rem)]">
