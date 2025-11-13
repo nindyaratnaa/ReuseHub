@@ -22,3 +22,11 @@ Route::get('/beranda', function () {
 Route::get('/beranda1', function () {
     return view('beranda1');
 });
+
+Route::get('/tentang', function () {
+    return view('tentang');
+});
+
+Route::get('/masuk', function () {
+    return view('masuk');
+});

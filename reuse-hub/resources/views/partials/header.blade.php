@@ -1,4 +1,4 @@
-<header class="fixed top-0 left-0 w-full bg-gray-50 border-t border-gray-200">
+<header class="fixed top-0 left-0 w-full bg-gray-50 border-t border-gray-200 z-50">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <!-- Logo -->
         <a href="/" class="text-2xl font-bold text-green-400 hover:text-green-300 transition duration-300">
@@ -7,10 +7,10 @@
 
         <!-- Navigation (desktop) -->
         <nav class="hidden md:flex space-x-8">
-            <a href="{{ url('/Beranda') }}" class="block hover:text-green-400 relative group transition-colors">Beranda
+            <a href="{{ url('/beranda') }}" class="block hover:text-green-400 relative group transition-colors">Beranda
                  <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="{{ url('/Profil') }}" class="block hover:text-green-400 relative group transition-colors">Profil
+            <a href="{{ url('/tentang') }}" class="block hover:text-green-400 relative group transition-colors">Tentang Kami
                 <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </a>
             <a href="{{ url('/Tukar') }}" class="block hover:text-green-400 relative group transition-colors">Tukar

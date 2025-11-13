@@ -18,7 +18,7 @@
                 </p>
 
                 <!-- Tombol -->
-                <button class="bg-green-500 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-200">
+                <button href="/daftar" class="bg-green-500 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-200">
                     Pelajari Lebih Lanjut &gt;
                 </button>
 
@@ -50,13 +50,13 @@
     </section>
 
     <!-- Section Ulasan -->
-    <section class="py-20 bg-green-50">
+    <section class="py-20 bg-green-900">
             <!-- Judul -->
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-green-500 mb-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
                     Dipercaya selama lebih dari 5 tahun
                 </h2>
-                <p class="text-xl text-gray-500">
+                <p class="text-xl text-gray-200">
                     Lihat apa yang mereka katakan tentang kami
                 </p>
             </div>
@@ -79,7 +79,7 @@
     </section>
 
     <!-- FAQ Section -->
-    <section class="py-12 bg-gray-100">
+    <section class="py-12 bg-green-900">
         <div class="container mx-auto px-4">
             <div class="max-w-3xl mx-auto">
                 <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">
@@ -126,6 +126,32 @@
             </div>
         </div>
     </section>
+
+<section class="py-12 bg-gray-50">
+    <div class="max-w-5xl mx-auto px-4">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                Still have questions?
+            </h2>
+            <p class="text-xl text-gray-600 mb-8">
+                Our team is here to help you choose the right plan for your business.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition-all">
+                    <a href="/login.html">
+                        Masuk
+                                </a>        
+                </button>
+
+                <button class="relative overflow-hidden group bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-200 hover:shadow-lg transition-all duration-300 text-gray-800 font-medium px-6 py-3 rounded-lg">
+                    <span class="relative z-10">View Documentation</span>
+                    <div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
 
 
 
