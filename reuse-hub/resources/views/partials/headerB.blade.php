@@ -7,7 +7,7 @@
 
         <!-- Tombol desktop -->
         <div class="hidden md:flex items-center gap-4">
-            <a href="{{ url('/masuk') }}" class="text-sm font-medium text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors">
+            <a href="{{ url('/masuk') }}" class="text-sm font-medium text-gray-600 hover:text-green-600 transition-colors">
                 Masuk
             </a>
             <a href="{{ url('/daftar') }}" class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
@@ -32,8 +32,8 @@
         class="fixed top-0 right-0 w-64 h-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-30">
         <div class="flex flex-col p-6 space-y-4">
             <button id="closeNav" class="self-end mb-4 hover:text-green-600">✕</button>
-            <a href="{{ url('/Masuk') }}" class=" text-center hover:text-green-600 transition">Masuk</a>
-            <a href="{{ url('/Daftar') }}" class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg text-center">Daftar</a>
+            <a href="{{ url('/masuk') }}" class=" text-center hover:text-green-600 transition">Masuk</a>
+            <a href="{{ url('/daftar') }}" class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg text-center">Daftar</a>
         </div>
     </div>
 </header>

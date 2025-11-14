@@ -19,12 +19,12 @@
 
                 <!-- Tombol CTA -->
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <button class="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200">
+                    <a href="{{ url('/tukar') }}" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200">
                         Mulai Tukar Sekarang
-                    </button>
-                    <button class="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white font-semibold px-8 py-3 rounded-lg transition duration-200">
+                    </a>
+                    <a href="{{ url('/tentang') }}" class="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white font-semibold px-8 py-3 rounded-lg transition duration-200">
                         Pelajari Lebih Lanjut
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Statistik -->

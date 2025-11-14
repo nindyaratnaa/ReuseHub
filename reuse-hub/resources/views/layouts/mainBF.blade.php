@@ -16,6 +16,6 @@
         </main>
 
         {{-- Footer --}}
-        @include('partials.footer')
+        @include('partials.footerB')
     </body>
 </html>

@@ -1,4 +1,4 @@
-@extends('layouts.mainB')
+@extends('layouts.mainBF')
 
 @section('title', 'Beranda - ReuseHub')
 

@@ -38,10 +38,12 @@
         class="fixed top-0 right-0 w-64 h-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-30">
         <div class="flex flex-col p-6 space-y-4">
             <button id="closeNav" class="self-end mb-4 hover:text-green-600 dark:hover:text-green-500">✕</button>
-            <a href="{{ url('/Beranda') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Tentang Kami</a>
-            <a href="{{ url('/Beranda') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Program</a>
-            <a href="{{ url('/Beranda') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Berita & Acara</a>
+            <a href="{{ url('/beranda') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Beranda</a>
+            <a href="{{ url('/tentang') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Tentang Kami</a>
+            <a href="{{ url('/tukar') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Tukar</a>
+            <a href="{{ url('/profil') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Profil</a>
             <hr class="border-gray-200 dark:border-gray-700">
+            <a href="{{ url('/unggah') }}" class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg text-center"> Unggah Barang</a>
         </div>
     </div>
 </header>
