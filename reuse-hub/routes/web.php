@@ -18,15 +18,21 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Protected Routes (require login)
 Route::middleware('auth')->group(function () {
     Route::get('/beranda', [PageController::class, 'beranda']);
-    Route::get('/tukar', [PageController::class, 'tukar']);
-    Route::get('/tukardetail/{id}', [PageController::class, 'tukardetail']);
-    Route::get('/unggah', [PageController::class, 'unggah']);
     Route::get('/profil', [PageController::class, 'profil']);
     Route::get('/chat', [PageController::class, 'chat']);
     Route::get('/pesan', [PageController::class, 'pesan']);
-        Route::get('/rating', [PageController::class, 'rating']);
-
+    Route::get('/rating', [PageController::class, 'rating']);
+    
+    // Item routes
+    Route::get('/tukar', [App\Http\Controllers\ItemController::class, 'index'])->name('items.index');
+    Route::get('/tukardetail/{id}', [App\Http\Controllers\ItemController::class, 'show'])->name('items.show');
+    Route::get('/unggah', [App\Http\Controllers\ItemController::class, 'create'])->name('items.create');
+    Route::post('/unggah', [App\Http\Controllers\ItemController::class, 'store'])->name('items.store');
 });
 
 // Admin Routes
-Route::get('/admin/users', [App\Http\Controllers\AdminController::class, 'users']);
+Route::middleware('auth')->prefix('admin')->group(function () {
+    Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
+    Route::get('/items', [App\Http\Controllers\AdminController::class, 'items'])->name('admin.items');
+    Route::delete('/items/{id}', [App\Http\Controllers\AdminController::class, 'deleteItem'])->name('admin.items.delete');
+});

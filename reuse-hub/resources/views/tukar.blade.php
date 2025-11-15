@@ -34,27 +34,27 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
                             <div class="space-y-2">
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="rounded border-gray-300 text-green-600 focus:ring-green-500">
+                                    <input type="checkbox" name="kategori[]" value="Elektronik" class="filter-checkbox rounded border-gray-300 text-green-600 focus:ring-green-500">
                                     <span class="ml-2 text-sm text-gray-700">Elektronik</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="rounded border-gray-300 text-green-600 focus:ring-green-500">
+                                    <input type="checkbox" name="kategori[]" value="Buku & Majalah" class="filter-checkbox rounded border-gray-300 text-green-600 focus:ring-green-500">
                                     <span class="ml-2 text-sm text-gray-700">Buku & Majalah</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="rounded border-gray-300 text-green-600 focus:ring-green-500">
+                                    <input type="checkbox" name="kategori[]" value="Pakaian" class="filter-checkbox rounded border-gray-300 text-green-600 focus:ring-green-500">
                                     <span class="ml-2 text-sm text-gray-700">Pakaian</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="rounded border-gray-300 text-green-600 focus:ring-green-500">
+                                    <input type="checkbox" name="kategori[]" value="Perabot" class="filter-checkbox rounded border-gray-300 text-green-600 focus:ring-green-500">
                                     <span class="ml-2 text-sm text-gray-700">Perabot</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="rounded border-gray-300 text-green-600 focus:ring-green-500">
+                                    <input type="checkbox" name="kategori[]" value="Mainan" class="filter-checkbox rounded border-gray-300 text-green-600 focus:ring-green-500">
                                     <span class="ml-2 text-sm text-gray-700">Mainan</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="rounded border-gray-300 text-green-600 focus:ring-green-500">
+                                    <input type="checkbox" name="kategori[]" value="Olahraga" class="filter-checkbox rounded border-gray-300 text-green-600 focus:ring-green-500">
                                     <span class="ml-2 text-sm text-gray-700">Olahraga</span>
                                 </label>
                             </div>
@@ -63,14 +63,16 @@
                         <!-- Lokasi -->
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi</label>
-                            <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none">
+                            <select id="lokasiFilter" name="lokasi" class="filter-select w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none">
                                 <option value="">Semua Lokasi</option>
-                                <option value="jakarta">Jakarta</option>
-                                <option value="bandung">Bandung</option>
-                                <option value="surabaya">Surabaya</option>
-                                <option value="medan">Medan</option>
-                                <option value="yogyakarta">Yogyakarta</option>
-                                <option value="semarang">Semarang</option>
+                                <option value="Jakarta">Jakarta</option>
+                                <option value="Jakarta Selatan">Jakarta Selatan</option>
+                                <option value="Jakarta Pusat">Jakarta Pusat</option>
+                                <option value="Bandung">Bandung</option>
+                                <option value="Surabaya">Surabaya</option>
+                                <option value="Medan">Medan</option>
+                                <option value="Yogyakarta">Yogyakarta</option>
+                                <option value="Semarang">Semarang</option>
                             </select>
                         </div>
 
@@ -79,26 +81,26 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Kondisi</label>
                             <div class="space-y-2">
                                 <label class="flex items-center">
-                                    <input type="radio" name="kondisi" class="border-gray-300 text-green-600 focus:ring-green-500">
+                                    <input type="radio" name="kondisi" value="" class="filter-radio border-gray-300 text-green-600 focus:ring-green-500" checked>
                                     <span class="ml-2 text-sm text-gray-700">Semua Kondisi</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="radio" name="kondisi" class="border-gray-300 text-green-600 focus:ring-green-500">
+                                    <input type="radio" name="kondisi" value="Seperti Baru" class="filter-radio border-gray-300 text-green-600 focus:ring-green-500">
                                     <span class="ml-2 text-sm text-gray-700">Seperti Baru</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="radio" name="kondisi" class="border-gray-300 text-green-600 focus:ring-green-500">
+                                    <input type="radio" name="kondisi" value="Baik" class="filter-radio border-gray-300 text-green-600 focus:ring-green-500">
                                     <span class="ml-2 text-sm text-gray-700">Baik</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="radio" name="kondisi" class="border-gray-300 text-green-600 focus:ring-green-500">
+                                    <input type="radio" name="kondisi" value="Cukup" class="filter-radio border-gray-300 text-green-600 focus:ring-green-500">
                                     <span class="ml-2 text-sm text-gray-700">Cukup</span>
                                 </label>
                             </div>
                         </div>
 
                         <!-- Reset Filter -->
-                        <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 rounded-lg transition duration-200">
+                        <button id="resetFilter" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 rounded-lg transition duration-200">
                             Reset Filter
                         </button>
                     </div>
@@ -114,7 +116,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
-                        <p class="text-gray-600 text-sm mt-2">Menampilkan <span id="resultCount">6</span> dari 156 barang</p>
+                        <p class="text-gray-600 text-sm mt-2">Menampilkan <span id="resultCount">{{ $items->count() }}</span> dari <span id="totalCount">{{ $items->total() }}</span> barang</p>
                     </div>
 
                     <!-- Products Grid -->
@@ -123,24 +125,8 @@
                     </div>
 
                     <!-- Pagination -->
-                    <div class="flex justify-center mt-8">
-                        <nav class="flex items-center gap-2">
-                            <button class="px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                            </button>
-                            <button class="px-3 py-2 bg-green-600 text-white rounded-lg">1</button>
-                            <button class="px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition">2</button>
-                            <button class="px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition">3</button>
-                            <span class="px-3 py-2 text-gray-500">...</span>
-                            <button class="px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition">7</button>
-                            <button class="px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </button>
-                        </nav>
+                    <div class="flex justify-center mt-8" id="paginationContainer">
+                        {{ $items->links() }}
                     </div>
                 </div>
             </div>
@@ -148,7 +134,10 @@
     </section>
 
 <script>
-    // Sample product data
+    // Get items from backend
+    let items = @json($items->items());
+    
+    // Sample product data for fallback
     const products = [
         {
             id: 1,
@@ -264,7 +253,17 @@
     // Function to render products
     function renderProducts() {
         const grid = document.getElementById('productsGrid');
-        grid.innerHTML = products.map(product => createProductCard(product)).join('');
+        grid.innerHTML = items.map(item => createProductCard({
+            id: item.id,
+            name: item.nama_barang,
+            description: item.deskripsi,
+            location: item.lokasi,
+            condition: item.kondisi,
+            category: item.kategori,
+            image: item.foto ? `/storage/${item.foto}` : 'https://via.placeholder.com/400x300',
+            owner: item.user?.name || 'Unknown',
+            postedDate: new Date(item.created_at).toLocaleDateString('id-ID')
+        })).join('');
     }
 
     // Function to navigate to detail page
@@ -272,40 +271,59 @@
         window.location.href = `/tukardetail/${productId}`;
     }
 
-    // Search functionality
-    let filteredProducts = [...products];
+    // Filter functionality
+    function applyFilters() {
+        const search = document.getElementById('mainSearch').value;
+        const kategori = Array.from(document.querySelectorAll('input[name="kategori[]"]:checked')).map(cb => cb.value);
+        const lokasi = document.getElementById('lokasiFilter').value;
+        const kondisi = document.querySelector('input[name="kondisi"]:checked')?.value || '';
 
-    function searchProducts(query) {
-        if (!query.trim()) {
-            filteredProducts = [...products];
-        } else {
-            filteredProducts = products.filter(product => 
-                product.name.toLowerCase().includes(query.toLowerCase()) ||
-                product.description.toLowerCase().includes(query.toLowerCase()) ||
-                product.category.toLowerCase().includes(query.toLowerCase())
-            );
-        }
-        renderFilteredProducts();
-        updateResultCount();
-    }
+        const params = new URLSearchParams();
+        if (search) params.append('search', search);
+        kategori.forEach(k => params.append('kategori[]', k));
+        if (lokasi) params.append('lokasi', lokasi);
+        if (kondisi) params.append('kondisi', kondisi);
 
-    function renderFilteredProducts() {
-        const grid = document.getElementById('productsGrid');
-        grid.innerHTML = filteredProducts.map(product => createProductCard(product)).join('');
-    }
-
-    function updateResultCount() {
-        document.getElementById('resultCount').textContent = filteredProducts.length;
+        fetch(`/tukar?${params.toString()}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            items = data.items;
+            renderProducts();
+            document.getElementById('resultCount').textContent = data.items.length;
+            document.getElementById('totalCount').textContent = data.total;
+        });
     }
 
     // Initialize page
     document.addEventListener('DOMContentLoaded', function() {
         renderProducts();
         
-        // Add search event listener
+        // Search
         const searchInput = document.getElementById('mainSearch');
-        searchInput.addEventListener('input', function(e) {
-            searchProducts(e.target.value);
+        let searchTimeout;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(applyFilters, 500);
+        });
+
+        // Filter listeners
+        document.querySelectorAll('.filter-checkbox, .filter-radio').forEach(el => {
+            el.addEventListener('change', applyFilters);
+        });
+        
+        document.getElementById('lokasiFilter').addEventListener('change', applyFilters);
+        
+        // Reset filter
+        document.getElementById('resetFilter').addEventListener('click', function() {
+            document.getElementById('mainSearch').value = '';
+            document.querySelectorAll('.filter-checkbox').forEach(cb => cb.checked = false);
+            document.getElementById('lokasiFilter').value = '';
+            document.querySelector('input[name="kondisi"][value=""]').checked = true;
+            applyFilters();
         });
     });
 </script>

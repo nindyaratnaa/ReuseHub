@@ -8,7 +8,7 @@
         <!-- Navigation (desktop) -->
         <nav class="hidden md:flex space-x-8">
             <a href="{{ url('/beranda') }}" class="block hover:text-green-400 relative group transition-colors">Beranda
-                 <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </a>
             <a href="{{ url('/tentang') }}" class="block hover:text-green-400 relative group transition-colors">Tentang Kami
                 <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
@@ -16,7 +16,7 @@
             <a href="{{ url('/tukar') }}" class="block hover:text-green-400 relative group transition-colors">Tukar
                 <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="{{ url('/Pasar') }}" class="block hover:text-green-400 relative group transition-colors">Profil
+            <a href="{{ url('/profil') }}" class="block hover:text-green-400 relative group transition-colors">Profil
                 <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </a>
         </nav>

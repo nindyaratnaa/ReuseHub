@@ -64,18 +64,14 @@ class AuthController extends Controller
             ], 422);
         }
 
+        // Try login with email
         $credentials = [
+            'email' => $request->emailUsername,
             'password' => $request->password
         ];
 
-        // Check if input is email or username
-        if (filter_var($request->emailUsername, FILTER_VALIDATE_EMAIL)) {
-            $credentials['email'] = $request->emailUsername;
-        } else {
-            $credentials['name'] = $request->emailUsername;
-        }
-
         if (Auth::attempt($credentials, $request->has('rememberMe'))) {
+            $request->session()->regenerate();
             return response()->json([
                 'success' => true,
                 'message' => 'Login berhasil!',
@@ -85,13 +81,15 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => false,
-            'message' => 'Email/username atau password salah.'
+            'message' => 'Email atau password salah.'
         ], 401);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect('/');
     }
 }

@@ -25,6 +25,15 @@
                 <div class="bg-green-600 text-white p-4">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
+                            @if(request('item_id') && isset($chatItem))
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                <span class="font-semibold text-sm">{{ strtoupper(substr($chatItem->user->name, 0, 2)) }}</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">{{ $chatItem->user->name }}</h3>
+                                <p class="text-green-100 text-sm">Online • Terakhir dilihat baru saja</p>
+                            </div>
+                            @else
                             <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
                                 <span class="font-semibold text-sm">AR</span>
                             </div>
@@ -32,42 +41,50 @@
                                 <h3 class="font-semibold">Ahmad Rizki</h3>
                                 <p class="text-green-100 text-sm">Online • Terakhir dilihat baru saja</p>
                             </div>
+                            @endif
                         </div>
 
                     </div>
                 </div>
 
                 <!-- Exchange Item Display -->
-                <div class="bg-blue-50 border-b border-blue-200 p-4">
-                    <div class="flex items-center gap-4">
-                        <div class="flex-shrink-0">
-                            <img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100&h=100&fit=crop" 
-                                 alt="iPhone 12 Pro" class="w-16 h-16 object-cover rounded-lg">
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2 mb-1">
-                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                                </svg>
-                                <span class="text-sm font-medium text-blue-800">Barang yang Ingin Ditukar</span>
+                @if(request('item_id'))
+                    @php
+                        $chatItem = App\Models\Item::find(request('item_id'));
+                    @endphp
+                    @if($chatItem)
+                    <div class="bg-blue-50 border-b border-blue-200 p-4">
+                        <div class="flex items-center gap-4">
+                            <div class="flex-shrink-0">
+                                <img src="{{ $chatItem->foto ? asset('storage/'.$chatItem->foto) : 'https://via.placeholder.com/100' }}" 
+                                     alt="{{ $chatItem->nama_barang }}" class="w-16 h-16 object-cover rounded-lg">
                             </div>
-                            <div class="flex items-center gap-2 mb-1">
-                                <h4 class="font-semibold text-gray-900">iPhone 12 Pro</h4>
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">Elektronik</span>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                                    </svg>
+                                    <span class="text-sm font-medium text-blue-800">Barang yang Ingin Ditukar</span>
+                                </div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h4 class="font-semibold text-gray-900">{{ $chatItem->nama_barang }}</h4>
+                                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{{ $chatItem->kategori }}</span>
+                                </div>
+                                <p class="text-sm text-gray-600">{{ $chatItem->lokasi }} • {{ $chatItem->kondisi }}</p>
                             </div>
-                            <p class="text-sm text-gray-600">Jakarta Selatan • Seperti Baru</p>
-                        </div>
-                        <div class="text-right">
-                            <button onclick="window.location.href='/rating'" 
-                                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm transition flex items-center gap-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Transaksi Selesai
-                            </button>
+                            <div class="text-right">
+                                <button onclick="window.location.href='/rating'" 
+                                        class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm transition flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Transaksi Selesai
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    @endif
+                @endif
 
                 <!-- Chat Messages Area -->
                 <div class="h-96 overflow-y-auto p-4 space-y-4" id="chatMessages">
@@ -223,15 +240,18 @@
             }
         }
         
+        const ownerInitials = '{{ request("item_id") && isset($chatItem) ? strtoupper(substr($chatItem->user->name, 0, 2)) : "AR" }}';
+        const ownerName = '{{ request("item_id") && isset($chatItem) ? $chatItem->user->name : "Ahmad Rizki" }}';
+        
         const botMessageDiv = document.createElement('div');
         botMessageDiv.className = 'flex justify-start';
         botMessageDiv.innerHTML = `
             <div class="max-w-xs lg:max-w-md">
                 <div class="flex items-center gap-2 mb-1">
                     <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                        <span class="text-white text-xs font-semibold">AR</span>
+                        <span class="text-white text-xs font-semibold">${ownerInitials}</span>
                     </div>
-                    <span class="text-sm font-medium text-gray-900">Ahmad Rizki</span>
+                    <span class="text-sm font-medium text-gray-900">${ownerName}</span>
                 </div>
                 <div class="bg-gray-100 text-gray-900 p-3 rounded-lg rounded-bl-none">
                     <p class="text-sm">${response}</p>

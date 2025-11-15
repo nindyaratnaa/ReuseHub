@@ -6,7 +6,10 @@
     <section class="py-8 bg-gray-50 min-h-screen">
         <div class="max-w-7xl mx-auto px-6">
             <div class="bg-white rounded-lg shadow-sm p-6">
-                <h1 class="text-2xl font-bold text-gray-900 mb-6">Data Pengguna Terdaftar</h1>
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-bold text-gray-900">Data Pengguna Terdaftar</h1>
+                    <a href="{{ route('admin.items') }}" class="text-green-600 hover:text-green-700">Lihat Data Barang</a>
+                </div>
                 
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">

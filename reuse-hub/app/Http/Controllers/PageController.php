@@ -34,18 +34,7 @@ class PageController extends Controller
     {
         return view('tentang');
     }
-    public function tukar()
-    {
-        return view('tukar');
-    }
-    public function tukardetail()
-    {
-        return view('tukardetail');
-    }
-    public function unggah()
-    {
-        return view('unggah');
-    }
+
     public function profil()
     {
         return view('profil');
