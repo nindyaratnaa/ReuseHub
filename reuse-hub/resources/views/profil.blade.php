@@ -48,7 +48,9 @@
                         <div class="flex flex-col sm:flex-row items-center gap-4">
                             <div class="text-sm text-gray-600">
                                 <span class="font-medium">47 Pertukaran</span> • 
-                                <span class="font-medium">4.9 ⭐</span> Rating
+                                <a href="/review" class="font-medium text-green-600 hover:text-green-700 transition">
+                                    4.9 ⭐ Rating
+                                </a>
                             </div>
                         </div>
                     </div>

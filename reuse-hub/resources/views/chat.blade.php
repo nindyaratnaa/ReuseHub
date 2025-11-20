@@ -167,6 +167,8 @@
 
 <script>
     let messageCount = 0;
+    const itemId = '{{ request("item_id") }}';
+    const csrfToken = '{{ csrf_token() }}';
 
     function sendQuickMessage(message) {
         sendMessage(message);
@@ -185,7 +187,41 @@
             chatMessages.innerHTML = '';
         }
         
-        // Add user message
+        // Add user message immediately
+        addUserMessage(message);
+        
+        // Clear input if not custom message
+        if (!customMessage) {
+            messageInput.value = '';
+        }
+        
+        // Send message via AJAX
+        fetch('/chat/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                message: message,
+                item_id: itemId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Message sent successfully');
+            }
+        })
+        .catch(error => {
+            console.error('Error sending message:', error);
+        });
+        
+        messageCount++;
+    }
+
+    function addUserMessage(message) {
+        const chatMessages = document.getElementById('chatMessages');
         const userMessageDiv = document.createElement('div');
         userMessageDiv.className = 'flex justify-end';
         userMessageDiv.innerHTML = `
@@ -198,70 +234,55 @@
         `;
         
         chatMessages.appendChild(userMessageDiv);
-        
-        // Clear input if not custom message
-        if (!customMessage) {
-            messageInput.value = '';
-        }
-        
-        // Auto scroll to bottom
         chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        // Simulate response after delay
-        setTimeout(() => {
-            addBotResponse(message);
-        }, 1000 + Math.random() * 2000);
-        
-        messageCount++;
     }
 
-    function addBotResponse(userMessage) {
+    function addReceivedMessage(message, senderName, senderInitials) {
         const chatMessages = document.getElementById('chatMessages');
-        const responses = {
-            'diskusi': 'Tentu! Saya senang bisa berdiskusi dengan Anda. Barang ini masih dalam kondisi sangat baik dan saya rawat dengan baik.',
-            'tukar': 'Wah, menarik! Saya lihat barang Anda juga bagus. Bisakah kita diskusikan detail pertukarannya? Mungkin kita bisa bertemu untuk melihat kondisi barang secara langsung.',
-            'foto': 'Baik, saya akan kirimkan foto tambahan dari berbagai sudut. Tunggu sebentar ya!',
-            'tersedia': 'Ya, barang masih tersedia dan siap untuk ditukar. Apakah Anda sudah memiliki barang yang ingin ditukarkan?',
-            'bertemu': 'Ide bagus! Saya bisa bertemu di area Jakarta Selatan. Bagaimana kalau kita tentukan waktu dan tempat yang cocok untuk kita berdua?',
-            'terima kasih': 'Sama-sama! Jangan ragu untuk menghubungi saya lagi jika ada pertanyaan atau sudah siap untuk melakukan pertukaran.'
-        };
-        
-        let response = 'Terima kasih atas pesannya! Saya akan segera merespons.';
-        
-        // Find appropriate response
-        if (userMessage === 'file') {
-            response = 'Terima kasih sudah mengirim file! Saya akan melihatnya dan memberikan tanggapan.';
-        } else {
-            for (let key in responses) {
-                if (userMessage.toLowerCase().includes(key)) {
-                    response = responses[key];
-                    break;
-                }
-            }
-        }
-        
-        const ownerInitials = '{{ request("item_id") && isset($chatItem) ? strtoupper(substr($chatItem->user->name, 0, 2)) : "AR" }}';
-        const ownerName = '{{ request("item_id") && isset($chatItem) ? $chatItem->user->name : "Ahmad Rizki" }}';
-        
-        const botMessageDiv = document.createElement('div');
-        botMessageDiv.className = 'flex justify-start';
-        botMessageDiv.innerHTML = `
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'flex justify-start';
+        messageDiv.innerHTML = `
             <div class="max-w-xs lg:max-w-md">
                 <div class="flex items-center gap-2 mb-1">
                     <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                        <span class="text-white text-xs font-semibold">${ownerInitials}</span>
+                        <span class="text-white text-xs font-semibold">${senderInitials}</span>
                     </div>
-                    <span class="text-sm font-medium text-gray-900">${ownerName}</span>
+                    <span class="text-sm font-medium text-gray-900">${senderName}</span>
                 </div>
                 <div class="bg-gray-100 text-gray-900 p-3 rounded-lg rounded-bl-none">
-                    <p class="text-sm">${response}</p>
+                    <p class="text-sm">${message}</p>
                 </div>
                 <p class="text-xs text-gray-500 mt-1">Baru saja</p>
             </div>
         `;
         
-        chatMessages.appendChild(botMessageDiv);
+        chatMessages.appendChild(messageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function loadMessages() {
+        fetch(`/chat/messages?item_id=${itemId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const chatMessages = document.getElementById('chatMessages');
+                if (data.messages.length > 0) {
+                    chatMessages.innerHTML = '';
+                    messageCount = data.messages.length;
+                    
+                    data.messages.forEach(msg => {
+                        if (msg.is_sender) {
+                            addUserMessage(msg.message);
+                        } else {
+                            addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials);
+                        }
+                    });
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading messages:', error);
+        });
     }
 
     function handleKeyPress(event) {
@@ -281,67 +302,93 @@
     function handleFileUpload(event) {
         const file = event.target.files[0];
         if (file) {
-            const chatMessages = document.getElementById('chatMessages');
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('item_id', itemId);
+            formData.append('_token', csrfToken);
             
-            // Clear welcome message on first message
-            if (messageCount === 0) {
-                chatMessages.innerHTML = '';
-            }
-            
-            // Create file message
-            const fileMessageDiv = document.createElement('div');
-            fileMessageDiv.className = 'flex justify-end';
-            
-            let fileContent = '';
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    fileContent = `
-                        <div class="max-w-xs lg:max-w-md">
-                            <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
-                                <img src="${e.target.result}" alt="Uploaded image" class="w-full h-auto rounded mb-2">
-                                <p class="text-sm">📷 Foto dikirim</p>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1 text-right">Baru saja</p>
-                        </div>
-                    `;
-                    fileMessageDiv.innerHTML = fileContent;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                fileContent = `
-                    <div class="max-w-xs lg:max-w-md">
-                        <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                                <div>
-                                    <p class="text-sm font-medium">${file.name}</p>
-                                    <p class="text-xs opacity-75">${(file.size / 1024).toFixed(1)} KB</p>
+            fetch('/chat/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Add file message to chat
+                    const chatMessages = document.getElementById('chatMessages');
+                    
+                    if (messageCount === 0) {
+                        chatMessages.innerHTML = '';
+                    }
+                    
+                    const fileMessageDiv = document.createElement('div');
+                    fileMessageDiv.className = 'flex justify-end';
+                    
+                    if (file.type.startsWith('image/')) {
+                        fileMessageDiv.innerHTML = `
+                            <div class="max-w-xs lg:max-w-md">
+                                <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
+                                    <img src="${data.file_url}" alt="Uploaded image" class="w-full h-auto rounded mb-2">
+                                    <p class="text-sm">📷 Foto dikirim</p>
                                 </div>
+                                <p class="text-xs text-gray-500 mt-1 text-right">Baru saja</p>
                             </div>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-1 text-right">Baru saja</p>
-                    </div>
-                `;
-                fileMessageDiv.innerHTML = fileContent;
-            }
+                        `;
+                    } else {
+                        fileMessageDiv.innerHTML = `
+                            <div class="max-w-xs lg:max-w-md">
+                                <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                        <div>
+                                            <p class="text-sm font-medium">${file.name}</p>
+                                            <p class="text-xs opacity-75">${(file.size / 1024).toFixed(1)} KB</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1 text-right">Baru saja</p>
+                            </div>
+                        `;
+                    }
+                    
+                    chatMessages.appendChild(fileMessageDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    messageCount++;
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading file:', error);
+            });
             
-            chatMessages.appendChild(fileMessageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            
-            // Simulate response
-            setTimeout(() => {
-                addBotResponse('file');
-            }, 1000 + Math.random() * 2000);
-            
-            messageCount++;
-            
-            // Clear file input
             event.target.value = '';
         }
     }
+
+    // Load messages on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadMessages();
+        
+        // Poll for new messages every 3 seconds
+        setInterval(function() {
+            fetch(`/chat/new-messages?item_id=${itemId}&last_count=${messageCount}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.new_messages.length > 0) {
+                    data.new_messages.forEach(msg => {
+                        if (!msg.is_sender) {
+                            addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials);
+                            messageCount++;
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error checking for new messages:', error);
+            });
+        }, 3000);
+    });
 </script>
 
 @endsection
