@@ -22,6 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/chat', [PageController::class, 'chat']);
     Route::get('/pesan', [PageController::class, 'pesan']);
     Route::get('/rating', [PageController::class, 'rating']);
+    Route::get('/review', [PageController::class, 'review']);
+
     
     // Item routes
     Route::get('/tukar', [App\Http\Controllers\ItemController::class, 'index'])->name('items.index');
