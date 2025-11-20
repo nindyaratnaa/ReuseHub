@@ -43,4 +43,8 @@ class PageController extends Controller
     {
         return view('rating');
     }
+    public function review()
+    {
+        return view('review');
+    }
 }
