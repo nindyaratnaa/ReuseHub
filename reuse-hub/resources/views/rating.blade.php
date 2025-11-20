@@ -145,7 +145,7 @@
                     </div>
 
                     <!-- Anonymous Toggle -->
-                    <div class="mb-8">
+                    <!-- <div class="mb-8">
                         <label class="flex items-center justify-between p-4 border border-gray-200 rounded-lg cursor-pointer">
                             <div>
                                 <h4 class="font-medium text-gray-900">Tampilkan nama saya</h4>
@@ -157,7 +157,7 @@
                                 <div class="toggle-dot absolute w-4 h-4 bg-white rounded-full shadow top-1 right-1 transition"></div>
                             </div>
                         </label>
-                    </div>
+                    </div> -->
 
                     <!-- Submit Button -->
                     <div class="flex gap-4">
