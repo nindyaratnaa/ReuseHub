@@ -165,10 +165,36 @@
         </div>
     </section>
 
+<!-- Demo Mode Toggle -->
+<div class="fixed top-4 right-4 z-50">
+    <div class="bg-white rounded-lg shadow-lg p-3 border">
+        <div class="flex items-center gap-2 mb-2">
+            <span class="text-sm font-medium text-gray-700">Demo Mode:</span>
+            <select id="userSelect" onchange="switchUser()" class="text-sm border border-gray-300 rounded px-2 py-1">
+                <option value="user1">User 1 (Jerome)</option>
+                <option value="user2">User 2 (Ahmad)</option>
+            </select>
+        </div>
+        <p class="text-xs text-gray-500">Buka 2 tab, pilih user berbeda di masing-masing tab</p>
+    </div>
+</div>
+
 <script>
     let messageCount = 0;
-    const itemId = '{{ request("item_id") }}';
-    const csrfToken = '{{ csrf_token() }}';
+    let currentUser = 'user1';
+    const itemId = '{{ request("item_id") ?? "demo" }}';
+    const chatKey = `chat_${itemId}`;
+    
+    // User data
+    const users = {
+        user1: { name: 'Jerome Polin', initials: 'JP' },
+        user2: { name: 'Ahmad Rizki', initials: 'AR' }
+    };
+
+    function switchUser() {
+        currentUser = document.getElementById('userSelect').value;
+        loadMessages();
+    }
 
     function sendQuickMessage(message) {
         sendMessage(message);
@@ -187,6 +213,9 @@
             chatMessages.innerHTML = '';
         }
         
+        // Save message to localStorage
+        saveMessage(message, currentUser);
+        
         // Add user message immediately
         addUserMessage(message);
         
@@ -195,29 +224,19 @@
             messageInput.value = '';
         }
         
-        // Send message via AJAX
-        fetch('/chat/send', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            body: JSON.stringify({
-                message: message,
-                item_id: itemId
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log('Message sent successfully');
-            }
-        })
-        .catch(error => {
-            console.error('Error sending message:', error);
-        });
-        
         messageCount++;
+    }
+
+    function saveMessage(message, sender) {
+        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        const newMessage = {
+            id: Date.now(),
+            message: message,
+            sender: sender,
+            timestamp: new Date().toISOString()
+        };
+        messages.push(newMessage);
+        localStorage.setItem(chatKey, JSON.stringify(messages));
     }
 
     function addUserMessage(message) {
@@ -261,28 +280,39 @@
     }
 
     function loadMessages() {
-        fetch(`/chat/messages?item_id=${itemId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const chatMessages = document.getElementById('chatMessages');
-                if (data.messages.length > 0) {
-                    chatMessages.innerHTML = '';
-                    messageCount = data.messages.length;
-                    
-                    data.messages.forEach(msg => {
-                        if (msg.is_sender) {
-                            addUserMessage(msg.message);
-                        } else {
-                            addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials);
-                        }
-                    });
+        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        const chatMessages = document.getElementById('chatMessages');
+        
+        if (messages.length > 0) {
+            chatMessages.innerHTML = '';
+            messageCount = messages.length;
+            
+            messages.forEach(msg => {
+                if (msg.sender === currentUser) {
+                    addUserMessage(msg.message);
+                } else {
+                    const otherUser = msg.sender === 'user1' ? users.user1 : users.user2;
+                    addReceivedMessage(msg.message, otherUser.name, otherUser.initials);
                 }
-            }
-        })
-        .catch(error => {
-            console.error('Error loading messages:', error);
-        });
+            });
+        }
+    }
+
+    function checkNewMessages() {
+        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        
+        if (messages.length > messageCount) {
+            const newMessages = messages.slice(messageCount);
+            
+            newMessages.forEach(msg => {
+                if (msg.sender !== currentUser) {
+                    const otherUser = msg.sender === 'user1' ? users.user1 : users.user2;
+                    addReceivedMessage(msg.message, otherUser.name, otherUser.initials);
+                }
+            });
+            
+            messageCount = messages.length;
+        }
     }
 
     function handleKeyPress(event) {
@@ -298,96 +328,92 @@
         this.style.height = Math.min(this.scrollHeight, 120) + 'px';
     });
 
-    // Handle file upload
+    // Handle file upload (demo)
     function handleFileUpload(event) {
         const file = event.target.files[0];
         if (file) {
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('item_id', itemId);
-            formData.append('_token', csrfToken);
+            const chatMessages = document.getElementById('chatMessages');
             
-            fetch('/chat/upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Add file message to chat
-                    const chatMessages = document.getElementById('chatMessages');
-                    
-                    if (messageCount === 0) {
-                        chatMessages.innerHTML = '';
-                    }
-                    
-                    const fileMessageDiv = document.createElement('div');
-                    fileMessageDiv.className = 'flex justify-end';
-                    
-                    if (file.type.startsWith('image/')) {
-                        fileMessageDiv.innerHTML = `
-                            <div class="max-w-xs lg:max-w-md">
-                                <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
-                                    <img src="${data.file_url}" alt="Uploaded image" class="w-full h-auto rounded mb-2">
-                                    <p class="text-sm">📷 Foto dikirim</p>
-                                </div>
-                                <p class="text-xs text-gray-500 mt-1 text-right">Baru saja</p>
+            if (messageCount === 0) {
+                chatMessages.innerHTML = '';
+            }
+            
+            const fileMessageDiv = document.createElement('div');
+            fileMessageDiv.className = 'flex justify-end';
+            
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    fileMessageDiv.innerHTML = `
+                        <div class="max-w-xs lg:max-w-md">
+                            <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
+                                <img src="${e.target.result}" alt="Uploaded image" class="w-full h-auto rounded mb-2">
+                                <p class="text-sm">📷 Foto dikirim</p>
                             </div>
-                        `;
-                    } else {
-                        fileMessageDiv.innerHTML = `
-                            <div class="max-w-xs lg:max-w-md">
-                                <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
-                                    <div class="flex items-center gap-2">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
-                                        <div>
-                                            <p class="text-sm font-medium">${file.name}</p>
-                                            <p class="text-xs opacity-75">${(file.size / 1024).toFixed(1)} KB</p>
-                                        </div>
-                                    </div>
+                            <p class="text-xs text-gray-500 mt-1 text-right">Baru saja</p>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                fileMessageDiv.innerHTML = `
+                    <div class="max-w-xs lg:max-w-md">
+                        <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-medium">${file.name}</p>
+                                    <p class="text-xs opacity-75">${(file.size / 1024).toFixed(1)} KB</p>
                                 </div>
-                                <p class="text-xs text-gray-500 mt-1 text-right">Baru saja</p>
                             </div>
-                        `;
-                    }
-                    
-                    chatMessages.appendChild(fileMessageDiv);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                    messageCount++;
-                }
-            })
-            .catch(error => {
-                console.error('Error uploading file:', error);
-            });
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1 text-right">Baru saja</p>
+                    </div>
+                `;
+            }
+            
+            chatMessages.appendChild(fileMessageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Save file message
+            saveMessage(`📷 ${file.name}`, currentUser);
+            messageCount++;
             
             event.target.value = '';
         }
     }
 
-    // Load messages on page load
+    // Initialize demo
     document.addEventListener('DOMContentLoaded', function() {
         loadMessages();
         
-        // Poll for new messages every 3 seconds
-        setInterval(function() {
-            fetch(`/chat/new-messages?item_id=${itemId}&last_count=${messageCount}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.new_messages.length > 0) {
-                    data.new_messages.forEach(msg => {
-                        if (!msg.is_sender) {
-                            addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials);
-                            messageCount++;
-                        }
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error checking for new messages:', error);
-            });
-        }, 3000);
+        // Check for new messages every 2 seconds
+        setInterval(checkNewMessages, 2000);
+        
+        // Clear demo data button (for testing)
+        const clearBtn = document.createElement('button');
+        clearBtn.textContent = 'Clear Chat';
+        clearBtn.className = 'text-xs bg-red-500 text-white px-2 py-1 rounded mt-2 w-full';
+        clearBtn.onclick = function() {
+            localStorage.removeItem(chatKey);
+            document.getElementById('chatMessages').innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Mulai Percakapan</h3>
+                    <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                        Jangan buang, ceritakan ulang! Tukar barang Anda, bantu yang membutuhkan, dan jadikan kebiasaan guna ulang sebagai gaya hidup baru kita. Mulai diskusi dengan pemilik barang untuk melakukan pertukaran yang saling menguntungkan.
+                    </p>
+                </div>
+            `;
+            messageCount = 0;
+        };
+        document.querySelector('.fixed.top-4.right-4 .bg-white').appendChild(clearBtn);
     });
 </script>
 
