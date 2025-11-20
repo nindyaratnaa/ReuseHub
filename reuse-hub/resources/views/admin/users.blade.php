@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.mainA')
 
 @section('title', 'Data Pengguna - Admin')
 

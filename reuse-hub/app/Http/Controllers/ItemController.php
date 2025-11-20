@@ -37,7 +37,7 @@ class ItemController extends Controller
             });
         }
 
-        $items = $query->paginate(6);
+        $items = $query->paginate(12);
 
         if ($request->ajax()) {
             return response()->json([

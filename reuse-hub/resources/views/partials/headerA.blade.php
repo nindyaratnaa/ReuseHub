@@ -1,22 +1,16 @@
 <header class="fixed top-0 left-0 w-full bg-gray-50 border-t border-gray-200 z-50">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <!-- Logo -->
-        <a href="{{ url('/beranda') }}" class="text-2xl font-bold text-green-400 hover:text-green-300 transition duration-300">
+        <a class="text-2xl font-bold text-green-400 hover:text-green-300 transition duration-300">
             ReuseHub
         </a>
 
         <!-- Navigation (desktop) -->
         <nav class="hidden md:flex space-x-8">
-            <a href="{{ url('/beranda') }}" class="block hover:text-green-400 relative group transition-colors">Beranda
+            <a href="{{ url('admin/users') }}" class="block hover:text-green-400 relative group transition-colors">Pengguna
                 <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="{{ url('/tentang') }}" class="block hover:text-green-400 relative group transition-colors">Tentang Kami
-                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
-            </a>
-            <a href="{{ url('/tukar') }}" class="block hover:text-green-400 relative group transition-colors">Tukar
-                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
-            </a>
-            <a href="{{ url('/profil') }}" class="block hover:text-green-400 relative group transition-colors">Profil
+            <a href="{{ url('admin/items') }}" class="block hover:text-green-400 relative group transition-colors">Daftar Barang
                 <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </a>
         </nav>
@@ -38,12 +32,8 @@
         class="fixed top-0 right-0 w-64 h-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-30">
         <div class="flex flex-col p-6 space-y-4">
             <button id="closeNav" class="self-end mb-4 hover:text-green-600 dark:hover:text-green-500">✕</button>
-            <a href="{{ url('/beranda') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Beranda</a>
-            <a href="{{ url('/tentang') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Tentang Kami</a>
-            <a href="{{ url('/tukar') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Tukar</a>
-            <a href="{{ url('/profil') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Profil</a>
-            <hr class="border-gray-200 dark:border-gray-700">
-            <a href="{{ url('/unggah') }}" class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg text-center"> Unggah Barang</a>
+            <a href="{{ url('admin/users') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Pengguna</a>
+            <a href="{{ url('admin/items') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Daftar Barang</a>
         </div>
     </div>
 </header>

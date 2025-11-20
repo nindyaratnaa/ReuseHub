@@ -392,12 +392,12 @@
                 Bergabunglah dengan komunitas ReuseHub dan mulai berkontribusi untuk planet yang lebih hijau hari ini juga.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button class="bg-white text-green-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-50 transition duration-200">
-                    Daftar Sekarang
-                </button>
-                <button class="border-2 border-white text-white font-semibold px-8 py-3 rounded-lg hover:bg-white hover:text-green-600 transition duration-200">
+                <a href="{{ url('/tentang') }}" class="bg-white text-green-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-50 transition duration-200">
+                    Pelajari Lebih Lanjut
+                </a>
+                <a href="{{ url('/tukar') }}" class="border-2 border-white text-white font-semibold px-8 py-3 rounded-lg hover:bg-white hover:text-green-600 transition duration-200">
                     Jelajahi Barang
-                </button>
+                </a>
             </div>
         </div>
     </section>

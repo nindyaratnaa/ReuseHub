@@ -114,27 +114,7 @@
                         Buat akun
                     </button>
 
-                    <!-- Divider -->
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-200"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-white text-gray-500">Atau lanjutkan dengan</span>
-                        </div>
-                    </div>
-
-                    <!-- Social Buttons -->
-                    <div class="grid grid-cols-1 gap-4">
-                        <button type="button" class="border border-gray-300 rounded-lg py-2 font-medium hover:bg-gray-50 transition">
-                            Google
-                        </button>
-                        <!-- <button type="button" class="border border-gray-300 rounded-lg py-2 font-medium hover:bg-gray-50 transition">
-                            GitHub
-                        </button> -->
-                    </div>
-
-                    <p class="mt-6 text-center text-sm text-gray-600">
+                    <p class="mt-2 text-center text-sm text-gray-600">
                         Sudah memiliki akun?
                         <a href="/masuk" class="text-green-600 hover:text-green-700 font-medium">
                             Masuk
@@ -194,43 +174,6 @@
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Buat akun';
             }
-        });
-    </script>tById("emailError");
-        const passwordError = document.getElementById("passwordError");
-        const confirmError = document.getElementById("confirmError");
-
-        form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const email = form.email.value.trim();
-        const password = form.password.value.trim();
-        const confirm = form.confirmPassword.value.trim();
-
-        let valid = true;
-
-        emailError.classList.add("hidden");
-        passwordError.classList.add("hidden");
-        confirmError.classList.add("hidden");
-
-        if (!email.includes("@")) {
-            emailError.classList.remove("hidden");
-            valid = false;
-        }
-
-        if (password.length < 6 || password.length > 20) {
-            passwordError.classList.remove("hidden");
-            valid = false;
-        }
-
-        if (password !== confirm) {
-            confirmError.classList.remove("hidden");
-            valid = false;
-        }
-
-        if (valid) {
-            alert("Account created successfully!");
-            form.reset();
-        }
         });
     </script>
 @endsection

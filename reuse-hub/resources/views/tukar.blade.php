@@ -125,7 +125,7 @@
                     </div>
 
                     <!-- Pagination -->
-                    <div class="flex justify-center mt-8" id="paginationContainer">
+                    <div class="flex flex-col items-center mt-8" id="paginationContainer">
                         {{ $items->links() }}
                     </div>
                 </div>
@@ -138,74 +138,74 @@
     let items = @json($items->items());
     
     // Sample product data for fallback
-    const products = [
-        {
-            id: 1,
-            name: "iPhone 12 Pro",
-            description: "Kondisi sangat baik, lengkap dengan charger dan case",
-            location: "Jakarta Selatan",
-            condition: "Seperti Baru",
-            category: "Elektronik",
-            image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop",
-            owner: "Ahmad Rizki",
-            postedDate: "2 hari lalu"
-        },
-        {
-            id: 2,
-            name: "Novel Harry Potter Set",
-            description: "Koleksi lengkap 7 buku, kondisi masih bagus",
-            location: "Bandung",
-            condition: "Baik",
-            category: "Buku & Majalah",
-            image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop",
-            owner: "Sari Dewi",
-            postedDate: "1 hari lalu"
-        },
-        {
-            id: 3,
-            name: "Jaket Denim Vintage",
-            description: "Jaket denim vintage ukuran M, warna biru klasik",
-            location: "Yogyakarta",
-            condition: "Baik",
-            category: "Pakaian",
-            image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop",
-            owner: "Maya Putri",
-            postedDate: "3 hari lalu"
-        },
-        {
-            id: 4,
-            name: "Kursi Gaming",
-            description: "Kursi gaming ergonomis, masih nyaman dipakai",
-            location: "Surabaya",
-            condition: "Cukup",
-            category: "Perabot",
-            image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-            owner: "Budi Santoso",
-            postedDate: "4 hari lalu"
-        },
-        {
-            id: 5,
-            name: "LEGO Architecture Set",
-            description: "Set LEGO lengkap dengan manual, kondisi prima",
-            location: "Jakarta Pusat",
-            condition: "Seperti Baru",
-            category: "Mainan",
-            image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
-            owner: "Andi Wijaya",
-            postedDate: "5 hari lalu"
-        },
-        {
-            id: 6,
-            name: "Sepeda Lipat Polygon",
-            description: "Sepeda lipat 20 inch, jarang dipakai, mulus",
-            location: "Medan",
-            condition: "Seperti Baru",
-            category: "Olahraga",
-            image: "https://unsplash.com/id/foto/sepeda-merah-duduk-di-dalam-kotak-kardus-VLi8aw4O2n4",
-            owner: "Lisa Permata",
-            postedDate: "1 minggu lalu"
-        }
-    ];
+    // const products = [
+        // {
+        //     id: 1,
+        //     name: "iPhone 12 Pro",
+        //     description: "Kondisi sangat baik, lengkap dengan charger dan case",
+        //     location: "Jakarta Selatan",
+        //     condition: "Seperti Baru",
+        //     category: "Elektronik",
+        //     image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop",
+        //     owner: "Ahmad Rizki",
+        //     postedDate: "2 hari lalu"
+        // },
+        // {
+        //     id: 2,
+        //     name: "Novel Harry Potter Set",
+        //     description: "Koleksi lengkap 7 buku, kondisi masih bagus",
+        //     location: "Bandung",
+        //     condition: "Baik",
+        //     category: "Buku & Majalah",
+        //     image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop",
+        //     owner: "Sari Dewi",
+        //     postedDate: "1 hari lalu"
+        // },
+        // {
+        //     id: 3,
+        //     name: "Jaket Denim Vintage",
+        //     description: "Jaket denim vintage ukuran M, warna biru klasik",
+        //     location: "Yogyakarta",
+        //     condition: "Baik",
+        //     category: "Pakaian",
+        //     image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop",
+        //     owner: "Maya Putri",
+        //     postedDate: "3 hari lalu"
+        // },
+        // {
+        //     id: 4,
+        //     name: "Kursi Gaming",
+        //     description: "Kursi gaming ergonomis, masih nyaman dipakai",
+        //     location: "Surabaya",
+        //     condition: "Cukup",
+        //     category: "Perabot",
+        //     image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
+        //     owner: "Budi Santoso",
+        //     postedDate: "4 hari lalu"
+        // },
+        // {
+        //     id: 5,
+        //     name: "LEGO Architecture Set",
+        //     description: "Set LEGO lengkap dengan manual, kondisi prima",
+        //     location: "Jakarta Pusat",
+        //     condition: "Seperti Baru",
+        //     category: "Mainan",
+        //     image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
+        //     owner: "Andi Wijaya",
+        //     postedDate: "5 hari lalu"
+        // },
+        // {
+        //     id: 6,
+        //     name: "Sepeda Lipat Polygon",
+        //     description: "Sepeda lipat 20 inch, jarang dipakai, mulus",
+        //     location: "Medan",
+        //     condition: "Seperti Baru",
+        //     category: "Olahraga",
+        //     image: "https://unsplash.com/id/foto/sepeda-merah-duduk-di-dalam-kotak-kardus-VLi8aw4O2n4",
+        //     owner: "Lisa Permata",
+        //     postedDate: "1 minggu lalu"
+        // }
+    // ];
 
     // Function to create product card
     function createProductCard(product) {
