@@ -22,7 +22,7 @@
 
     <!-- Review Container -->
     <section class="py-8 bg-gray-50 min-h-screen">
-        <div class="max-w-4xl mx-auto px-6">
+        <div class="max-w-7xl mx-auto px-6">
             
             <!-- User Header -->
             <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
@@ -63,92 +63,11 @@
                 </div>
             </div>
 
-            <!-- Rating Summary -->
-            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-                <h2 class="text-xl font-semibold text-gray-900 mb-4">Ringkasan Rating</h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <div class="space-y-3">
-                            <div class="flex items-center gap-3">
-                                <span class="text-sm text-gray-600 w-8">5 ⭐</span>
-                                <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                    <div class="bg-yellow-400 h-2 rounded-full" style="width: 85%"></div>
-                                </div>
-                                <span class="text-sm text-gray-600 w-8">40</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="text-sm text-gray-600 w-8">4 ⭐</span>
-                                <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                    <div class="bg-yellow-400 h-2 rounded-full" style="width: 10%"></div>
-                                </div>
-                                <span class="text-sm text-gray-600 w-8">5</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="text-sm text-gray-600 w-8">3 ⭐</span>
-                                <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                    <div class="bg-yellow-400 h-2 rounded-full" style="width: 4%"></div>
-                                </div>
-                                <span class="text-sm text-gray-600 w-8">2</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="text-sm text-gray-600 w-8">2 ⭐</span>
-                                <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                    <div class="bg-yellow-400 h-2 rounded-full" style="width: 0%"></div>
-                                </div>
-                                <span class="text-sm text-gray-600 w-8">0</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="text-sm text-gray-600 w-8">1 ⭐</span>
-                                <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                    <div class="bg-yellow-400 h-2 rounded-full" style="width: 0%"></div>
-                                </div>
-                                <span class="text-sm text-gray-600 w-8">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Kualitas Barang</span>
-                            <div class="flex items-center gap-1">
-                                <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
-                                <span class="text-sm text-gray-600">4.8</span>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Komunikasi</span>
-                            <div class="flex items-center gap-1">
-                                <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
-                                <span class="text-sm text-gray-600">4.9</span>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Ketepatan Waktu</span>
-                            <div class="flex items-center gap-1">
-                                <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
-                                <span class="text-sm text-gray-600">5.0</span>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Keramahan</span>
-                            <div class="flex items-center gap-1">
-                                <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
-                                <span class="text-sm text-gray-600">4.9</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
 
             <!-- Reviews List -->
             <div class="bg-white rounded-lg shadow-sm p-6">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-xl font-semibold text-gray-900">Ulasan Pengguna</h2>
-                    <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                        <option>Terbaru</option>
-                        <option>Rating Tertinggi</option>
-                        <option>Rating Terendah</option>
-                    </select>
-                </div>
+                <h2 class="text-xl font-semibold text-gray-900 mb-6">Ulasan Pengguna</h2>
 
                 <div class="space-y-6">
                     <!-- Review Item 1 -->
@@ -170,8 +89,13 @@
                                     <span class="text-sm text-gray-500">2 hari yang lalu</span>
                                 </div>
                                 <p class="text-gray-700 mb-3">Sangat puas dengan pertukaran barang! Jerome sangat ramah dan responsif. Barang yang diberikan sesuai dengan deskripsi dan kondisinya sangat baik. Proses pertukaran juga cepat dan mudah. Highly recommended! 👍</p>
+                                <div class="flex flex-wrap gap-2 mb-2">
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Kualitas barang sesuai</span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Penjual ramah</span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Respon cepat</span>
+                                </div>
                                 <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full">Tukar Buku</span>
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Tukar Buku</span>
                                     <span>•</span>
                                     <span>Verified Purchase</span>
                                 </div>
@@ -198,6 +122,11 @@
                                     <span class="text-sm text-gray-500">1 minggu yang lalu</span>
                                 </div>
                                 <p class="text-gray-700 mb-3">Pengalaman tukar barang yang luar biasa! Jerome orangnya sangat terpercaya dan komunikatif. Barang elektronik yang saya tukar dengan dia masih berfungsi dengan baik. Terima kasih banyak!</p>
+                                <div class="flex flex-wrap gap-2 mb-2">
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Kualitas barang sesuai</span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Komunikasi baik</span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Tepat waktu</span>
+                                </div>
                                 <div class="flex items-center gap-2 text-sm text-gray-600">
                                     <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Tukar Elektronik</span>
                                     <span>•</span>
@@ -226,6 +155,10 @@
                                     <span class="text-sm text-gray-500">2 minggu yang lalu</span>
                                 </div>
                                 <p class="text-gray-700 mb-3">Jerome sangat profesional dalam bertransaksi. Barang yang ditukar sesuai ekspektasi, meskipun ada sedikit keterlambatan dalam pengiriman. Overall, pengalaman yang baik dan akan tukar barang lagi di masa depan.</p>
+                                <div class="flex flex-wrap gap-2 mb-2">
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Kualitas barang sesuai</span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Penjual ramah</span>
+                                </div>
                                 <div class="flex items-center gap-2 text-sm text-gray-600">
                                     <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Tukar Pakaian</span>
                                     <span>•</span>
@@ -253,7 +186,11 @@
                                     </div>
                                     <span class="text-sm text-gray-500">3 minggu yang lalu</span>
                                 </div>
-                                <p class="text-gray-700 mb-3">Seller yang sangat recommended! Jerome memberikan informasi yang detail tentang barang, foto yang jelas, dan proses tukar yang smooth. Barang yang saya terima bahkan lebih bagus dari yang saya harapkan. Top!</p>
+                                <div class="flex flex-wrap gap-2 mb-2">
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Kualitas barang sesuai</span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Respon cepat</span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Komunikasi baik</span>
+                                </div>
                                 <div class="flex items-center gap-2 text-sm text-gray-600">
                                     <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full">Tukar Furniture</span>
                                     <span>•</span>
@@ -282,6 +219,10 @@
                                     <span class="text-sm text-gray-500">1 bulan yang lalu</span>
                                 </div>
                                 <p class="text-gray-700 mb-3">Pertama kali tukar barang di ReuseHub dan langsung dapat pengalaman yang menyenangkan! Jerome sangat membantu dan sabar menjelaskan kondisi barang. Barang yang diterima sesuai deskripsi dan packaging rapi. Terima kasih!</p>
+                                <div class="flex flex-wrap gap-2 mb-2">
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Penjual ramah</span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Komunikasi baik</span>
+                                </div>
                                 <div class="flex items-center gap-2 text-sm text-gray-600">
                                     <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded-full">Tukar Aksesoris</span>
                                     <span>•</span>
@@ -292,12 +233,7 @@
                     </div>
                 </div>
 
-                <!-- Load More Button -->
-                <div class="text-center mt-8">
-                    <button class="border border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-2 rounded-lg transition">
-                        Muat Lebih Banyak Ulasan
-                    </button>
-                </div>
+
             </div>
         </div>
     </section>
