@@ -165,35 +165,50 @@
         </div>
     </section>
 
-<!-- Demo Mode Toggle -->
+<!-- Login Simulator -->
 <div class="fixed top-4 right-4 z-50">
     <div class="bg-white rounded-lg shadow-lg p-3 border">
         <div class="flex items-center gap-2 mb-2">
-            <span class="text-sm font-medium text-gray-700">Demo Mode:</span>
-            <select id="userSelect" onchange="switchUser()" class="text-sm border border-gray-300 rounded px-2 py-1">
-                <option value="user1">User 1 (Jerome)</option>
-                <option value="user2">User 2 (Ahmad)</option>
+            <span class="text-sm font-medium text-gray-700">Login sebagai:</span>
+            <select id="loginSelect" onchange="loginAs()" class="text-sm border border-gray-300 rounded px-2 py-1">
+                <option value="jerome">Jerome Polin</option>
+                <option value="ahmad">Ahmad Rizki</option>
             </select>
         </div>
-        <p class="text-xs text-gray-500">Buka 2 tab, pilih user berbeda di masing-masing tab</p>
+        <p class="text-xs text-gray-500">Simulasi login berbeda untuk test chat</p>
     </div>
 </div>
 
 <script>
     let messageCount = 0;
-    let currentUser = 'user1';
-    const itemId = '{{ request("item_id") ?? "demo" }}';
-    const chatKey = `chat_${itemId}`;
+    let currentUserId = 'jerome';
+    const itemId = '{{ request("item_id") ?? "1" }}';
+    const chatKey = `reusehub_chat_${itemId}`;
     
-    // User data
+    // User database
     const users = {
-        user1: { name: 'Jerome Polin', initials: 'JP' },
-        user2: { name: 'Ahmad Rizki', initials: 'AR' }
+        jerome: { id: 1, name: 'Jerome Polin', initials: 'JP', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face' },
+        ahmad: { id: 2, name: 'Ahmad Rizki', initials: 'AR', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face' }
     };
 
-    function switchUser() {
-        currentUser = document.getElementById('userSelect').value;
+    function loginAs() {
+        currentUserId = document.getElementById('loginSelect').value;
+        updateChatHeader();
         loadMessages();
+    }
+
+    function updateChatHeader() {
+        const otherUserId = currentUserId === 'jerome' ? 'ahmad' : 'jerome';
+        const otherUser = users[otherUserId];
+        
+        // Update chat header to show who we're chatting with
+        const headerName = document.querySelector('.bg-green-600 h3');
+        const headerInitials = document.querySelector('.bg-green-600 .bg-green-500 span');
+        
+        if (headerName && headerInitials) {
+            headerName.textContent = otherUser.name;
+            headerInitials.textContent = otherUser.initials;
+        }
     }
 
     function sendQuickMessage(message) {
@@ -209,12 +224,13 @@
         const chatMessages = document.getElementById('chatMessages');
         
         // Clear welcome message on first message
-        if (messageCount === 0) {
+        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        if (messages.length === 0) {
             chatMessages.innerHTML = '';
         }
         
         // Save message to localStorage
-        saveMessage(message, currentUser);
+        saveMessage(message, currentUserId);
         
         // Add user message immediately
         addUserMessage(message);
@@ -227,12 +243,20 @@
         messageCount++;
     }
 
-    function saveMessage(message, sender) {
+    function saveMessage(message, senderId) {
         const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        const sender = users[senderId];
+        const otherUserId = senderId === 'jerome' ? 'ahmad' : 'jerome';
+        const receiver = users[otherUserId];
+        
         const newMessage = {
             id: Date.now(),
             message: message,
-            sender: sender,
+            sender_id: sender.id,
+            sender_name: sender.name,
+            sender_initials: sender.initials,
+            receiver_id: receiver.id,
+            item_id: itemId,
             timestamp: new Date().toISOString()
         };
         messages.push(newMessage);
@@ -282,32 +306,50 @@
     function loadMessages() {
         const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
         const chatMessages = document.getElementById('chatMessages');
+        const currentUser = users[currentUserId];
         
         if (messages.length > 0) {
             chatMessages.innerHTML = '';
             messageCount = messages.length;
             
             messages.forEach(msg => {
-                if (msg.sender === currentUser) {
+                if (msg.sender_id === currentUser.id) {
+                    // Pesan yang saya kirim
                     addUserMessage(msg.message);
                 } else {
-                    const otherUser = msg.sender === 'user1' ? users.user1 : users.user2;
-                    addReceivedMessage(msg.message, otherUser.name, otherUser.initials);
+                    // Pesan yang saya terima
+                    addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials);
                 }
             });
+        } else {
+            // Show welcome message if no messages
+            chatMessages.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Mulai Percakapan</h3>
+                    <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                        Jangan buang, ceritakan ulang! Tukar barang Anda, bantu yang membutuhkan, dan jadikan kebiasaan guna ulang sebagai gaya hidup baru kita. Mulai diskusi dengan pemilik barang untuk melakukan pertukaran yang saling menguntungkan.
+                    </p>
+                </div>
+            `;
         }
     }
 
     function checkNewMessages() {
         const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        const currentUser = users[currentUserId];
         
         if (messages.length > messageCount) {
             const newMessages = messages.slice(messageCount);
             
             newMessages.forEach(msg => {
-                if (msg.sender !== currentUser) {
-                    const otherUser = msg.sender === 'user1' ? users.user1 : users.user2;
-                    addReceivedMessage(msg.message, otherUser.name, otherUser.initials);
+                if (msg.sender_id !== currentUser.id) {
+                    // Pesan baru dari orang lain
+                    addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials);
                 }
             });
             
@@ -378,40 +420,31 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
             
             // Save file message
-            saveMessage(`📷 ${file.name}`, currentUser);
+            saveMessage(`📷 ${file.name}`, currentUserId);
             messageCount++;
             
             event.target.value = '';
         }
     }
 
-    // Initialize demo
+    // Initialize chat
     document.addEventListener('DOMContentLoaded', function() {
+        updateChatHeader();
         loadMessages();
         
-        // Check for new messages every 2 seconds
+        // Check for new messages every 2 seconds (real-time simulation)
         setInterval(checkNewMessages, 2000);
         
-        // Clear demo data button (for testing)
+        // Add clear chat button for testing
         const clearBtn = document.createElement('button');
         clearBtn.textContent = 'Clear Chat';
         clearBtn.className = 'text-xs bg-red-500 text-white px-2 py-1 rounded mt-2 w-full';
         clearBtn.onclick = function() {
-            localStorage.removeItem(chatKey);
-            document.getElementById('chatMessages').innerHTML = `
-                <div class="text-center py-8">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Mulai Percakapan</h3>
-                    <p class="text-gray-600 mb-6 max-w-md mx-auto">
-                        Jangan buang, ceritakan ulang! Tukar barang Anda, bantu yang membutuhkan, dan jadikan kebiasaan guna ulang sebagai gaya hidup baru kita. Mulai diskusi dengan pemilik barang untuk melakukan pertukaran yang saling menguntungkan.
-                    </p>
-                </div>
-            `;
-            messageCount = 0;
+            if (confirm('Hapus semua pesan chat?')) {
+                localStorage.removeItem(chatKey);
+                messageCount = 0;
+                loadMessages();
+            }
         };
         document.querySelector('.fixed.top-4.right-4 .bg-white').appendChild(clearBtn);
     });
