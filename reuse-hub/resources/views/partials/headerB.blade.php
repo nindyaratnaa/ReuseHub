@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <!-- Logo -->
         <a href="/" class="text-2xl font-bold text-green-400 hover:text-green-300 transition duration-300">
-            Reuse Hub
+            ReuseHub
         </a>
 
         <!-- Tombol desktop -->
