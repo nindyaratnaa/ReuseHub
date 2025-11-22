@@ -46,6 +46,11 @@ class PageController extends Controller
     }
     public function review()
     {
-        return view('review');
+        $user = auth()->user();
+        $reviews = \App\Models\Review::where('user_id', $user->id)
+            ->with('reviewer')
+            ->latest()
+            ->get();
+        return view('review', compact('user', 'reviews'));
     }
 }

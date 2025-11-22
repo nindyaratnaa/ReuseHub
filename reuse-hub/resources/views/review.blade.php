@@ -28,36 +28,28 @@
             <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
                 <div class="flex items-center gap-4">
                     <div class="w-20 h-20 bg-gray-200 rounded-full overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" 
-                             alt="Jerome Polin" class="w-full h-full object-cover">
+                        <img src="{{ $user->avatar ? asset('storage/'.$user->avatar) : 'https://ui-avatars.com/api/?name='.urlencode($user->name).'&size=150&background=10b981&color=fff' }}" 
+                             alt="{{ $user->name }}" class="w-full h-full object-cover">
                     </div>
                     <div class="flex-1">
-                        <h1 class="text-2xl font-bold text-gray-900 mb-1">Jerome Polin</h1>
-                        <p class="text-gray-600 mb-2">Bergabung sejak Januari 2024</p>
+                        <h1 class="text-2xl font-bold text-gray-900 mb-1">{{ $user->name }}</h1>
+                        <p class="text-gray-600 mb-2">Bergabung sejak {{ $user->created_at->format('F Y') }}</p>
                         <div class="flex items-center gap-4">
                             <div class="flex items-center gap-1">
+                                @php
+                                    $avgRating = $user->average_rating;
+                                    $fullStars = floor($avgRating);
+                                @endphp
                                 <div class="flex text-yellow-400">
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <svg class="w-5 h-5 {{ $i <= $fullStars ? 'fill-current' : 'text-gray-300 fill-current' }}" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                    @endfor
                                 </div>
-                                <span class="font-semibold text-gray-900 ml-1">4.9</span>
-                                <span class="text-gray-600">(47 ulasan)</span>
+                                <span class="font-semibold text-gray-900 ml-1">{{ number_format($avgRating, 1) }}</span>
+                                <span class="text-gray-600">({{ $user->total_reviews }} ulasan)</span>
                             </div>
-                            <span class="text-gray-600">•</span>
-                            <span class="text-gray-600">47 Pertukaran Berhasil</span>
                         </div>
                     </div>
                 </div>
@@ -69,171 +61,53 @@
             <div class="bg-white rounded-lg shadow-sm p-6">
                 <h2 class="text-xl font-semibold text-gray-900 mb-6">Ulasan Pengguna</h2>
 
+                @if($reviews->count() > 0)
                 <div class="space-y-6">
-                    <!-- Review Item 1 -->
-                    <div class="border-b border-gray-200 pb-6">
+                    @foreach($reviews as $review)
+                    <div class="{{ !$loop->last ? 'border-b border-gray-200 pb-6' : '' }}">
                         <div class="flex items-start gap-4">
                             <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
-                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" 
-                                     alt="Sarah" class="w-full h-full object-cover">
+                                <img src="{{ $review->reviewer->avatar ? asset('storage/'.$review->reviewer->avatar) : 'https://ui-avatars.com/api/?name='.urlencode($review->reviewer->name).'&size=100&background=10b981&color=fff' }}" 
+                                     alt="{{ $review->reviewer->name }}" class="w-full h-full object-cover">
                             </div>
                             <div class="flex-1">
                                 <div class="flex items-center justify-between mb-2">
                                     <div>
-                                        <h4 class="font-semibold text-gray-900">Sarah Wijaya</h4>
+                                        <h4 class="font-semibold text-gray-900">{{ $review->reviewer->name }}</h4>
                                         <div class="flex items-center gap-2">
-                                            <div class="flex text-yellow-400 text-sm">⭐⭐⭐⭐⭐</div>
-                                            <span class="text-sm text-gray-600">5.0</span>
+                                            <div class="flex text-yellow-400 text-sm">
+                                                @for($i = 1; $i <= $review->rating; $i++)⭐@endfor
+                                            </div>
+                                            <span class="text-sm text-gray-600">{{ $review->rating }}.0</span>
                                         </div>
                                     </div>
-                                    <span class="text-sm text-gray-500">2 hari yang lalu</span>
+                                    <span class="text-sm text-gray-500">{{ $review->created_at->diffForHumans() }}</span>
                                 </div>
-                                <p class="text-gray-700 mb-3">Sangat puas dengan pertukaran barang! Jerome sangat ramah dan responsif. Barang yang diberikan sesuai dengan deskripsi dan kondisinya sangat baik. Proses pertukaran juga cepat dan mudah. Highly recommended! 👍</p>
-                                <div class="flex flex-wrap gap-2 mb-2">
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Kualitas barang sesuai</span>
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Penjual ramah</span>
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Respon cepat</span>
-                                </div>
+                                @if($review->komentar)
+                                <p class="text-gray-700 mb-3">{{ $review->komentar }}</p>
+                                @endif
                                 <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Tukar Buku</span>
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Pertukaran Barang</span>
                                     <span>•</span>
-                                    <span>Verified Purchase</span>
+                                    <span>Verified</span>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    @endforeach
 
-                    <!-- Review Item 2 -->
-                    <div class="border-b border-gray-200 pb-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" 
-                                     alt="Ahmad" class="w-full h-full object-cover">
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex items-center justify-between mb-2">
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">Ahmad Rizki</h4>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex text-yellow-400 text-sm">⭐⭐⭐⭐⭐</div>
-                                            <span class="text-sm text-gray-600">5.0</span>
-                                        </div>
-                                    </div>
-                                    <span class="text-sm text-gray-500">1 minggu yang lalu</span>
-                                </div>
-                                <p class="text-gray-700 mb-3">Pengalaman tukar barang yang luar biasa! Jerome orangnya sangat terpercaya dan komunikatif. Barang elektronik yang saya tukar dengan dia masih berfungsi dengan baik. Terima kasih banyak!</p>
-                                <div class="flex flex-wrap gap-2 mb-2">
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Kualitas barang sesuai</span>
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Komunikasi baik</span>
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Tepat waktu</span>
-                                </div>
-                                <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Tukar Elektronik</span>
-                                    <span>•</span>
-                                    <span>Verified Purchase</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Review Item 3 -->
-                    <div class="border-b border-gray-200 pb-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
-                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" 
-                                     alt="Maya" class="w-full h-full object-cover">
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex items-center justify-between mb-2">
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">Maya Sari</h4>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex text-yellow-400 text-sm">⭐⭐⭐⭐⭐</div>
-                                            <span class="text-sm text-gray-600">4.0</span>
-                                        </div>
-                                    </div>
-                                    <span class="text-sm text-gray-500">2 minggu yang lalu</span>
-                                </div>
-                                <p class="text-gray-700 mb-3">Jerome sangat profesional dalam bertransaksi. Barang yang ditukar sesuai ekspektasi, meskipun ada sedikit keterlambatan dalam pengiriman. Overall, pengalaman yang baik dan akan tukar barang lagi di masa depan.</p>
-                                <div class="flex flex-wrap gap-2 mb-2">
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Kualitas barang sesuai</span>
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Penjual ramah</span>
-                                </div>
-                                <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Tukar Pakaian</span>
-                                    <span>•</span>
-                                    <span>Verified Purchase</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Review Item 4 -->
-                    <div class="border-b border-gray-200 pb-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" 
-                                     alt="Budi" class="w-full h-full object-cover">
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex items-center justify-between mb-2">
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">Budi Santoso</h4>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex text-yellow-400 text-sm">⭐⭐⭐⭐⭐</div>
-                                            <span class="text-sm text-gray-600">5.0</span>
-                                        </div>
-                                    </div>
-                                    <span class="text-sm text-gray-500">3 minggu yang lalu</span>
-                                </div>
-                                <div class="flex flex-wrap gap-2 mb-2">
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Kualitas barang sesuai</span>
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Respon cepat</span>
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Komunikasi baik</span>
-                                </div>
-                                <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full">Tukar Furniture</span>
-                                    <span>•</span>
-                                    <span>Verified Purchase</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Review Item 5 -->
-                    <div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
-                                <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=100&h=100&fit=crop&crop=face" 
-                                     alt="Lisa" class="w-full h-full object-cover">
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex items-center justify-between mb-2">
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">Lisa Permata</h4>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex text-yellow-400 text-sm">⭐⭐⭐⭐⭐</div>
-                                            <span class="text-sm text-gray-600">5.0</span>
-                                        </div>
-                                    </div>
-                                    <span class="text-sm text-gray-500">1 bulan yang lalu</span>
-                                </div>
-                                <p class="text-gray-700 mb-3">Pertama kali tukar barang di ReuseHub dan langsung dapat pengalaman yang menyenangkan! Jerome sangat membantu dan sabar menjelaskan kondisi barang. Barang yang diterima sesuai deskripsi dan packaging rapi. Terima kasih!</p>
-                                <div class="flex flex-wrap gap-2 mb-2">
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Penjual ramah</span>
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Komunikasi baik</span>
-                                </div>
-                                <div class="flex items-center gap-2 text-sm text-gray-600">
-                                    <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded-full">Tukar Aksesoris</span>
-                                    <span>•</span>
-                                    <span>Verified Purchase</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
-
+                @else
+                <div class="text-center py-12">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Belum Ada Ulasan</h3>
+                    <p class="text-gray-600">Belum ada ulasan untuk pengguna ini.</p>
+                </div>
+                @endif
             </div>
         </div>
     </section>

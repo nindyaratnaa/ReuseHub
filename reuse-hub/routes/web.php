@@ -23,7 +23,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/chat', [PageController::class, 'chat']);
     Route::get('/pesan', [PageController::class, 'pesan']);
     Route::get('/rating', [PageController::class, 'rating']);
+    Route::post('/rating/submit', [App\Http\Controllers\ReviewController::class, 'store'])->name('rating.submit');
     Route::get('/review', [PageController::class, 'review']);
+    Route::get('/review/{userId}', [App\Http\Controllers\ReviewController::class, 'show'])->name('review.show');
 
     
     // Item routes

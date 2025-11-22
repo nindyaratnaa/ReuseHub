@@ -49,4 +49,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'user_id');
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return $this->reviews()->avg('rating') ?? 0;
+    }
+
+    public function getTotalReviewsAttribute()
+    {
+        return $this->reviews()->count();
+    }
 }

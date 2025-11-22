@@ -28,15 +28,21 @@
                 </div>
 
                 <!-- User Info -->
+                @php
+                    $ratedUserId = request('user_id');
+                    $ratedUser = $ratedUserId ? \App\Models\User::find($ratedUserId) : null;
+                @endphp
+                @if($ratedUser)
                 <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg mb-6">
                     <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
-                        <span class="font-semibold text-white">AR</span>
+                        <span class="font-semibold text-white">{{ strtoupper(substr($ratedUser->name, 0, 2)) }}</span>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-gray-900">Ahmad Rizki</h3>
-                        <p class="text-sm text-gray-600">iPhone 12 Pro • Elektronik</p>
+                        <h3 class="font-semibold text-gray-900">{{ $ratedUser->name }}</h3>
+                        <p class="text-sm text-gray-600">Pertukaran Barang</p>
                     </div>
                 </div>
+                @endif
 
                 <form id="ratingForm">
                     <!-- Star Rating -->
@@ -242,34 +248,64 @@
         }
     });
 
-    function submitRating() {
+    async function submitRating() {
         if (selectedRating === 0) {
             alert('Silakan pilih rating terlebih dahulu');
+            return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('user_id');
+
+        if (!userId) {
+            alert('User ID tidak ditemukan');
             return;
         }
 
         const selectedCategories = Array.from(document.querySelectorAll('input[name="categories"]:checked'))
             .map(cb => cb.value);
         const reviewText = document.getElementById('reviewText').value;
-        const showName = document.getElementById('showName').checked;
 
-        // Show success message
-        const successDiv = document.createElement('div');
-        successDiv.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
-        successDiv.innerHTML = `
-            <div class="flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Rating berhasil dikirim! Terima kasih atas ulasan Anda.</span>
-            </div>
-        `;
-        document.body.appendChild(successDiv);
+        const komentar = reviewText + (selectedCategories.length > 0 ? '\n\nKategori: ' + selectedCategories.join(', ') : '');
 
-        setTimeout(() => {
-            successDiv.remove();
-            window.location.href = '/tukar';
-        }, 2000);
+        try {
+            const response = await fetch('/rating/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    rating: selectedRating,
+                    komentar: komentar
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                const successDiv = document.createElement('div');
+                successDiv.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+                successDiv.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>${data.message}</span>
+                    </div>
+                `;
+                document.body.appendChild(successDiv);
+
+                setTimeout(() => {
+                    successDiv.remove();
+                    window.location.href = '/tukar';
+                }, 2000);
+            }
+        } catch (error) {
+            alert('Terjadi kesalahan saat mengirim rating');
+        }
     }
 </script>
 
