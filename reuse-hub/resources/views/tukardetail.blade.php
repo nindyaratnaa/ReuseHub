@@ -24,7 +24,7 @@
                 <!-- Product Images -->
                 <div class="space-y-4">
                     <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-                        <img src="{{ $item->foto ? asset('storage/'.$item->foto) : 'https://via.placeholder.com/600x400' }}" alt="{{ $item->nama_barang }}" class="w-full h-96 object-cover">
+                        <img src="{{ $item->foto ? (str_starts_with($item->foto, 'http') ? $item->foto : asset('storage/'.$item->foto)) : 'https://via.placeholder.com/600x400' }}" alt="{{ $item->nama_barang }}" class="w-full h-96 object-cover">
                     </div>
                 </div>
 
@@ -68,7 +68,7 @@
                                         <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
                                             <path d="M10 15l-5.878 3.09 1.122-6.545L.488 6.91l6.562-.955L10 0l2.95 5.955 6.562.955-4.756 4.635 1.122 6.545z"/>
                                         </svg>
-                                        <span class="text-sm text-gray-600 ml-1">4.8 (24 ulasan)</span>
+                                        <span class="text-sm text-gray-600 ml-1">{{ number_format($item->user->average_rating, 1) }} ({{ $item->user->total_reviews }} ulasan)</span>
                                     </div>
                                     <span class="text-sm text-gray-500">•</span>
                                     <span class="text-sm text-gray-500">{{ $item->created_at->diffForHumans() }}</span>
@@ -112,7 +112,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach($relatedItems as $related)
                     <a href="/tukardetail/{{ $related->id }}" class="bg-gray-50 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-300">
-                        <img src="{{ $related->foto ? asset('storage/'.$related->foto) : 'https://via.placeholder.com/400x300' }}" alt="{{ $related->nama_barang }}" class="w-full h-32 object-cover">
+                        <img src="{{ $related->foto ? (str_starts_with($related->foto, 'http') ? $related->foto : asset('storage/'.$related->foto)) : 'https://via.placeholder.com/400x300' }}" alt="{{ $related->nama_barang }}" class="w-full h-32 object-cover">
                         <div class="p-3">
                             <h4 class="font-semibold text-gray-900 text-sm mb-1 line-clamp-1">{{ $related->nama_barang }}</h4>
                             <p class="text-gray-600 text-xs mb-2 line-clamp-2">{{ Str::limit($related->deskripsi, 60) }}</p>

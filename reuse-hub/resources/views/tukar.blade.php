@@ -264,8 +264,8 @@
             location: item.lokasi,
             condition: item.kondisi,
             category: item.kategori,
-            image: item.foto ?
-                STORAGE_URL + "/" + item.foto : 'https://via.placeholder.com/400x300',
+            image: item.foto ? 
+                (item.foto.startsWith('http') ? item.foto : STORAGE_URL + "/" + item.foto) : 'https://via.placeholder.com/400x300',
             owner: item.user?.name || 'Unknown',
             postedDate: new Date(item.created_at).toLocaleDateString('id-ID')
         })).join('');
