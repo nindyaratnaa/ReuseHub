@@ -18,7 +18,8 @@ class ReviewSeeder extends Seeder
             $admin = \App\Models\User::create([
                 'name' => 'Admin',
                 'email' => 'admin@reusehub.com',
-                'password' => bcrypt('password')
+                'password' => bcrypt('admin123'),
+                'is_admin' => true
             ]);
         }
 

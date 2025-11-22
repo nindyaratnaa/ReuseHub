@@ -72,10 +72,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->has('rememberMe'))) {
             $request->session()->regenerate();
+            
+            $redirect = Auth::user()->is_admin ? '/admin/users' : '/beranda';
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Login berhasil!',
-                'redirect' => '/beranda'
+                'redirect' => $redirect
             ]);
         }
 

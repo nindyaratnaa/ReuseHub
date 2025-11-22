@@ -16,7 +16,8 @@ class ItemSeeder extends Seeder
             $user = User::create([
                 'name' => 'Admin',
                 'email' => 'admin@reusehub.com',
-                'password' => bcrypt('password')
+                'password' => bcrypt('admin123'),
+                'is_admin' => true
             ]);
         }
 
