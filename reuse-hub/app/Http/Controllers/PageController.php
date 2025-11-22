@@ -37,7 +37,8 @@ class PageController extends Controller
 
     public function profil()
     {
-        return view('profil');
+        $user = auth()->user();
+        return view('profil', compact('user'));
     }
     public function rating()
     {

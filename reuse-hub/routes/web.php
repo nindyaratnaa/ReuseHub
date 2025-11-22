@@ -19,6 +19,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/beranda', [PageController::class, 'beranda']);
     Route::get('/profil', [PageController::class, 'profil']);
+    Route::post('/profil/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::get('/chat', [PageController::class, 'chat']);
     Route::get('/pesan', [PageController::class, 'pesan']);
     Route::get('/rating', [PageController::class, 'rating']);

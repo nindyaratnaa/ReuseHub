@@ -26,7 +26,7 @@
                     <!-- Profile Picture -->
                     <div class="relative">
                         <div class="w-32 h-32 bg-gray-200 rounded-full overflow-hidden">
-                            <img id="profileImage" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" 
+                            <img id="profileImage" src="{{ $user->avatar ? asset('storage/'.$user->avatar) : 'https://ui-avatars.com/api/?name='.urlencode($user->name).'&size=150&background=10b981&color=fff' }}" 
                                  alt="Profile" class="w-full h-full object-cover">
                         </div>
                         <button onclick="document.getElementById('fileInput').click()" 
@@ -41,8 +41,8 @@
 
                     <!-- Profile Info -->
                     <div class="flex-1 text-center md:text-left">
-                        <h1 class="text-2xl font-bold text-gray-900 mb-2">Jerome Polin</h1>
-                        <p class="text-gray-600 mb-4">Bergabung sejak Januari 2024</p>
+                        <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ $user->name }}</h1>
+                        <p class="text-gray-600 mb-4">Bergabung sejak {{ $user->created_at->format('F Y') }}</p>
                         
                         <!-- Account Status -->
                         <div class="flex flex-col sm:flex-row items-center gap-4">
@@ -74,29 +74,29 @@
                             <div class="grid md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
-                                    <input type="text" id="fullName" value="Jerome Polin" disabled
+                                    <input type="text" id="fullName" name="name" value="{{ $user->name }}" disabled
                                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-50">
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                                    <input type="email" id="email" value="jerome.polin@email.com" disabled
+                                    <input type="email" id="email" value="{{ $user->email }}" disabled
                                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-50">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Handphone</label>
-                                    <input type="tel" id="phone" value="+62 812-3456-7890" disabled
+                                    <input type="tel" id="phone" name="phone" value="{{ $user->phone ?? '' }}" disabled
                                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-50">
                                 </div>
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Alamat</label>
-                                    <textarea id="address" rows="3" disabled
-                                              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-50">Jl. Sudirman No. 123, Jakarta Selatan, DKI Jakarta 12190</textarea>
+                                    <textarea id="address" name="address" rows="3" disabled
+                                              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-50">{{ $user->address ?? '' }}</textarea>
                                 </div>
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
-                                    <textarea id="bio" rows="3" disabled
-                                              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-50">Content creator dan mahasiswa yang peduli lingkungan. Suka berbagi pengetahuan dan menukar barang untuk mengurangi limbah. Mari bersama-sama menjaga bumi!</textarea>
+                                    <textarea id="bio" name="bio" rows="3" disabled
+                                              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-50">{{ $user->bio ?? '' }}</textarea>
                                 </div>
                             </div>
 
@@ -132,10 +132,12 @@
                 originalData[input.id] = input.value;
             });
 
-            // Enable inputs
+            // Enable inputs except email
             inputs.forEach(input => {
-                input.disabled = false;
-                input.classList.remove('disabled:bg-gray-50');
+                if (input.id !== 'email') {
+                    input.disabled = false;
+                    input.classList.remove('disabled:bg-gray-50');
+                }
             });
 
             editBtn.innerHTML = `
@@ -176,28 +178,53 @@
         saveButtons.style.display = 'none';
     }
 
-    function saveProfile() {
-        // Simulate saving
-        const inputs = document.querySelectorAll('#profileForm input, #profileForm select, #profileForm textarea');
+    async function saveProfile() {
+        const formData = new FormData();
+        formData.append('name', document.getElementById('fullName').value);
+        formData.append('phone', document.getElementById('phone').value);
+        formData.append('address', document.getElementById('address').value);
+        formData.append('bio', document.getElementById('bio').value);
         
-        // Show success message
-        const successDiv = document.createElement('div');
-        successDiv.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
-        successDiv.innerHTML = `
-            <div class="flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Profil berhasil diperbarui!</span>
-            </div>
-        `;
-        document.body.appendChild(successDiv);
+        const avatarFile = document.getElementById('fileInput').files[0];
+        if (avatarFile) {
+            formData.append('avatar', avatarFile);
+        }
 
-        setTimeout(() => {
-            successDiv.remove();
-        }, 3000);
+        try {
+            const response = await fetch('/profil/update', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
 
-        // Disable inputs
+            const data = await response.json();
+
+            if (data.success) {
+                const successDiv = document.createElement('div');
+                successDiv.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+                successDiv.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>${data.message}</span>
+                    </div>
+                `;
+                document.body.appendChild(successDiv);
+
+                setTimeout(() => {
+                    successDiv.remove();
+                    location.reload();
+                }, 2000);
+            }
+        } catch (error) {
+            alert('Terjadi kesalahan saat menyimpan profil');
+        }
+
+        const inputs = document.querySelectorAll('#profileForm input, #profileForm select, #profileForm textarea');
         inputs.forEach(input => {
             input.disabled = true;
             input.classList.add('disabled:bg-gray-50');
