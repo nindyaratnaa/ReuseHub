@@ -155,7 +155,7 @@ function loadMessages() {
 }
 
 function checkNewMessages() {
-    if (!activeChat || lastMessageId === 0) return;
+    if (!activeChat) return;
     
     fetch(`/chat/messages?item_id=${activeChat.item_id}&other_user_id=${activeChat.other_user_id}&last_id=${lastMessageId}`, {
         headers: {
@@ -167,9 +167,7 @@ function checkNewMessages() {
     .then(data => {
         if (data.success && data.messages.length > 0) {
             data.messages.forEach(msg => {
-                if (msg.sender_id === window.currentUserId) {
-                    addUserMessage(msg.message, msg.created_at);
-                } else {
+                if (msg.sender_id !== window.currentUserId) {
                     addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials, msg.created_at);
                 }
                 lastMessageId = Math.max(lastMessageId, msg.id);
