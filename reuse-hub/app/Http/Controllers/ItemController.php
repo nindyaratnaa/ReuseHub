@@ -99,4 +99,76 @@ class ItemController extends Controller
         'redirect' => '/tukar'
     ]);
 }
+
+    public function edit($id)
+    {
+        $item = Item::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+        return view('edit-barang', compact('item'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $item = Item::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $validator = Validator::make($request->all(), [
+            'nama_barang' => 'required|string|max:255',
+            'kategori' => 'required|string',
+            'kondisi' => 'required|string',
+            'lokasi' => 'required|string',
+            'deskripsi' => 'required|string|min:20',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:10240'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $data = [
+            'nama_barang' => $request->nama_barang,
+            'kategori' => $request->kategori,
+            'kondisi' => $request->kondisi,
+            'lokasi' => $request->lokasi,
+            'deskripsi' => $request->deskripsi
+        ];
+
+        if ($request->hasFile('foto')) {
+            if ($item->foto && Storage::disk('public')->exists($item->foto)) {
+                Storage::disk('public')->delete($item->foto);
+            }
+            $data['foto'] = $request->file('foto')->store('items', 'public');
+        }
+
+        $item->update($data);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Barang berhasil diperbarui!',
+            'redirect' => '/profil'
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $item = Item::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        if ($item->foto && Storage::disk('public')->exists($item->foto)) {
+            Storage::disk('public')->delete($item->foto);
+        }
+
+        $item->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Barang berhasil dihapus!'
+        ]);
+    }
 }

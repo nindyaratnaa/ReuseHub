@@ -111,8 +111,79 @@
                             </div>
                         </form>
             </div>
+
+            <!-- My Items Section -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mt-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900">Barang Saya</h2>
+                    <a href="/unggah" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        <span>Tambah Barang</span>
+                    </a>
+                </div>
+
+                @if(isset($userItems) && $userItems->count() > 0)
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @foreach($userItems as $item)
+                        <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition flex flex-col h-full">
+                            <div class="aspect-w-16 aspect-h-12 bg-gray-100">
+                                <img src="{{ $item->foto ? asset('storage/'.$item->foto) : '/images/placeholder.jpg' }}" 
+                                     alt="{{ $item->nama_barang }}" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="p-4 flex flex-col flex-1">
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-900 mb-2">{{ $item->nama_barang }}</h3>
+                                    <p class="text-sm text-gray-600 mb-2 h-10 overflow-hidden">{{ Str::limit($item->deskripsi, 80) }}</p>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm text-gray-600">{{ $item->kategori }}</span>
+                                        <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                                            {{ ucfirst($item->kondisi) }}
+                                        </span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <span class="text-sm text-gray-500">📍 {{ $item->lokasi }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2 mt-auto">
+                                    <button onclick="editItem({{ $item->id }})" 
+                                            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition">
+                                        Edit
+                                    </button>
+                                    <button onclick="deleteItem({{ $item->id }})" 
+                                            class="flex-1 bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm transition">
+                                        Hapus
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Pagination -->
+                    @if($userItems->hasPages())
+                        <div class="mt-6">
+                            {{ $userItems->links() }}
+                        </div>
+                    @endif
+                @else
+                    <div class="text-center py-12">
+                        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Belum ada barang</h3>
+                        <p class="text-gray-600 mb-4">Anda belum mengunggah barang apapun</p>
+                        <a href="/unggah" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition">
+                            Unggah Barang Pertama
+                        </a>
+                    </div>
+                @endif
+            </div>
         </div>
     </section>
+
+    
 
 <script>
     let isEditing = false;
@@ -251,6 +322,49 @@
                 document.getElementById('profileImage').src = e.target.result;
             };
             reader.readAsDataURL(file);
+        }
+    }
+
+    function editItem(itemId) {
+        window.location.href = `/barang/${itemId}/edit`;
+    }
+
+    async function deleteItem(itemId) {
+        if (confirm('Apakah Anda yakin ingin menghapus barang ini?')) {
+            try {
+                const response = await fetch(`/barang/${itemId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const successDiv = document.createElement('div');
+                    successDiv.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+                    successDiv.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Barang berhasil dihapus</span>
+                        </div>
+                    `;
+                    document.body.appendChild(successDiv);
+
+                    setTimeout(() => {
+                        successDiv.remove();
+                        location.reload();
+                    }, 2000);
+                } else {
+                    alert('Gagal menghapus barang');
+                }
+            } catch (error) {
+                alert('Terjadi kesalahan saat menghapus barang');
+            }
         }
     }
 </script>

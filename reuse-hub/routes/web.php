@@ -34,6 +34,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/tukardetail/{id}', [App\Http\Controllers\ItemController::class, 'show'])->name('items.show');
     Route::get('/unggah', [App\Http\Controllers\ItemController::class, 'create'])->name('items.create');
     Route::post('/unggah', [App\Http\Controllers\ItemController::class, 'store'])->name('items.store');
+    Route::get('/barang/{id}/edit', [App\Http\Controllers\ItemController::class, 'edit'])->name('items.edit');
+    Route::put('/barang/{id}', [App\Http\Controllers\ItemController::class, 'update'])->name('items.update');
+    Route::delete('/barang/{id}', [App\Http\Controllers\ItemController::class, 'destroy'])->name('items.destroy');
 });
 
 // Admin Routes

@@ -41,7 +41,10 @@ class PageController extends Controller
     public function profil()
     {
         $user = auth()->user();
-        return view('profil', compact('user'));
+        $userItems = \App\Models\Item::where('user_id', $user->id)
+            ->latest()
+            ->paginate(6);
+        return view('profil', compact('user', 'userItems'));
     }
     public function rating()
     {
