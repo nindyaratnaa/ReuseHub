@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ChatController;
 
 // Public Routes
 Route::get('/', [PageController::class, 'beranda1']);
@@ -22,6 +23,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profil', [PageController::class, 'profil']);
     Route::post('/profil/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::get('/chat', [PageController::class, 'chat']);
+    Route::post('/chat/send', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('/chat/messages', [App\Http\Controllers\ChatController::class, 'getMessages'])->name('chat.messages');
     Route::get('/pesan', [PageController::class, 'pesan']);
     Route::get('/rating', [PageController::class, 'rating']);
     Route::post('/rating/submit', [App\Http\Controllers\ReviewController::class, 'store'])->name('rating.submit');
