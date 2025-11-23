@@ -46,7 +46,7 @@
             <div>
                 <h3 class="text-lg font-semibold mb-4 text-white">Perusahaan</h3>
                 <ul class="space-y-2">
-                    <li><a href="{{ url('/tentang') }}" class="text-green-200 hover:text-white transition-colors text-sm">Tentang Kami</a></li>
+                    <li><a href="{{ url('/tentang1') }}" class="text-green-200 hover:text-white transition-colors text-sm">Tentang Kami</a></li>
                     <li><a href="{{ url('/error') }}" class="text-green-200 hover:text-white transition-colors text-sm">Karir</a></li>
                     <li><a href="{{ url('/error') }}" class="text-green-200 hover:text-white transition-colors text-sm">Blog</a></li>
                     <li><a href="{{ url('/error') }}" class="text-green-200 hover:text-white transition-colors text-sm">Press Kit</a></li>

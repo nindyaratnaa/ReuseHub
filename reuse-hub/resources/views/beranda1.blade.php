@@ -19,12 +19,12 @@
 
                 <!-- Tombol CTA -->
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <button class="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200">
-                        Mulai Tukar Sekarang
-                    </button>
-                    <button class="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white font-semibold px-8 py-3 rounded-lg transition duration-200">
+                    <a href="{{ url('/daftar') }}" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200">
+                        Daftar Sekarang
+                    </a>
+                    <a href="{{ url('/tentang1') }}" class="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white font-semibold px-8 py-3 rounded-lg transition duration-200">
                         Pelajari Lebih Lanjut
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Statistik -->
@@ -392,12 +392,12 @@
                 Bergabunglah dengan komunitas ReuseHub dan mulai berkontribusi untuk planet yang lebih hijau hari ini juga.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button class="bg-white text-green-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-50 transition duration-200">
+                <a href="{{ url('/daftar') }}" class="bg-white text-green-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-50 transition duration-200">
                     Daftar Sekarang
-                </button>
-                <button class="border-2 border-white text-white font-semibold px-8 py-3 rounded-lg hover:bg-white hover:text-green-600 transition duration-200">
-                    Jelajahi Barang
-                </button>
+                </a>
+                <a href="{{ url('/tentang1') }}" class="border-2 border-white text-white font-semibold px-8 py-3 rounded-lg hover:bg-white hover:text-green-600 transition duration-200">
+                    Pelajari Lebih Lanjut
+                </a>
             </div>
         </div>
     </section>

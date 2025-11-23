@@ -5,7 +5,7 @@ use App\Http\Controllers\PageController;
 
 // Public Routes
 Route::get('/', [PageController::class, 'beranda1']);
-Route::get('/tentang', [PageController::class, 'tentang']);
+Route::get('/tentang1', [PageController::class, 'tentang1']);
 Route::get('/error', function () { return view('error'); });
 
 // Auth Routes
@@ -18,6 +18,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Protected Routes (require login)
 Route::middleware('auth')->group(function () {
     Route::get('/beranda', [PageController::class, 'beranda']);
+    Route::get('/tentang', [PageController::class, 'tentang']);
     Route::get('/profil', [PageController::class, 'profil']);
     Route::post('/profil/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::get('/chat', [PageController::class, 'chat']);

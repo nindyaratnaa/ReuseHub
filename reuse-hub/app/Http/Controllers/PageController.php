@@ -34,7 +34,10 @@ class PageController extends Controller
     {
         return view('tentang');
     }
-
+    public function tentang1()
+    {
+        return view('tentang1');
+    }
     public function profil()
     {
         $user = auth()->user();
