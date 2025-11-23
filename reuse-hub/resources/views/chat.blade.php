@@ -165,51 +165,14 @@
         </div>
     </section>
 
-<!-- Login Simulator -->
-<div class="fixed top-4 right-4 z-50">
-    <div class="bg-white rounded-lg shadow-lg p-3 border">
-        <div class="flex items-center gap-2 mb-2">
-            <span class="text-sm font-medium text-gray-700">Login sebagai:</span>
-            <select id="loginSelect" onchange="loginAs()" class="text-sm border border-gray-300 rounded px-2 py-1">
-                <option value="jerome">Jerome Polin</option>
-                <option value="ahmad">Ahmad Rizki</option>
-            </select>
-        </div>
-        <p class="text-xs text-gray-500">Simulasi login berbeda untuk test chat</p>
-    </div>
-</div>
-
 <script>
     let messageCount = 0;
-    let currentUserId = 'jerome';
+    const currentUserId = {{ auth()->id() ?? 1 }}; // ID user yang sedang login
+    const currentUserName = '{{ auth()->user()->name ?? "Jerome Polin" }}';
+    const currentUserInitials = '{{ strtoupper(substr(auth()->user()->name ?? "Jerome Polin", 0, 2)) }}';
     const itemId = '{{ request("item_id") ?? "1" }}';
     const chatKey = `reusehub_chat_${itemId}`;
-    
-    // User database
-    const users = {
-        jerome: { id: 1, name: 'Jerome Polin', initials: 'JP', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face' },
-        ahmad: { id: 2, name: 'Ahmad Rizki', initials: 'AR', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face' }
-    };
-
-    function loginAs() {
-        currentUserId = document.getElementById('loginSelect').value;
-        updateChatHeader();
-        loadMessages();
-    }
-
-    function updateChatHeader() {
-        const otherUserId = currentUserId === 'jerome' ? 'ahmad' : 'jerome';
-        const otherUser = users[otherUserId];
-        
-        // Update chat header to show who we're chatting with
-        const headerName = document.querySelector('.bg-green-600 h3');
-        const headerInitials = document.querySelector('.bg-green-600 .bg-green-500 span');
-        
-        if (headerName && headerInitials) {
-            headerName.textContent = otherUser.name;
-            headerInitials.textContent = otherUser.initials;
-        }
-    }
+    const csrfToken = '{{ csrf_token() }}';
 
     function sendQuickMessage(message) {
         sendMessage(message);
@@ -230,7 +193,7 @@
         }
         
         // Save message to localStorage
-        saveMessage(message, currentUserId);
+        saveMessage(message);
         
         // Add user message immediately
         addUserMessage(message);
@@ -243,19 +206,15 @@
         messageCount++;
     }
 
-    function saveMessage(message, senderId) {
+    function saveMessage(message) {
         const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
-        const sender = users[senderId];
-        const otherUserId = senderId === 'jerome' ? 'ahmad' : 'jerome';
-        const receiver = users[otherUserId];
         
         const newMessage = {
             id: Date.now(),
             message: message,
-            sender_id: sender.id,
-            sender_name: sender.name,
-            sender_initials: sender.initials,
-            receiver_id: receiver.id,
+            sender_id: currentUserId,
+            sender_name: currentUserName,
+            sender_initials: currentUserInitials,
             item_id: itemId,
             timestamp: new Date().toISOString()
         };
@@ -306,14 +265,13 @@
     function loadMessages() {
         const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
         const chatMessages = document.getElementById('chatMessages');
-        const currentUser = users[currentUserId];
         
         if (messages.length > 0) {
             chatMessages.innerHTML = '';
             messageCount = messages.length;
             
             messages.forEach(msg => {
-                if (msg.sender_id === currentUser.id) {
+                if (msg.sender_id === currentUserId) {
                     // Pesan yang saya kirim
                     addUserMessage(msg.message);
                 } else {
@@ -341,13 +299,12 @@
 
     function checkNewMessages() {
         const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
-        const currentUser = users[currentUserId];
         
         if (messages.length > messageCount) {
             const newMessages = messages.slice(messageCount);
             
             newMessages.forEach(msg => {
-                if (msg.sender_id !== currentUser.id) {
+                if (msg.sender_id !== currentUserId) {
                     // Pesan baru dari orang lain
                     addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials);
                 }
@@ -420,7 +377,7 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
             
             // Save file message
-            saveMessage(`📷 ${file.name}`, currentUserId);
+            saveMessage(`📷 ${file.name}`);
             messageCount++;
             
             event.target.value = '';
@@ -429,24 +386,10 @@
 
     // Initialize chat
     document.addEventListener('DOMContentLoaded', function() {
-        updateChatHeader();
         loadMessages();
         
         // Check for new messages every 2 seconds (real-time simulation)
         setInterval(checkNewMessages, 2000);
-        
-        // Add clear chat button for testing
-        const clearBtn = document.createElement('button');
-        clearBtn.textContent = 'Clear Chat';
-        clearBtn.className = 'text-xs bg-red-500 text-white px-2 py-1 rounded mt-2 w-full';
-        clearBtn.onclick = function() {
-            if (confirm('Hapus semua pesan chat?')) {
-                localStorage.removeItem(chatKey);
-                messageCount = 0;
-                loadMessages();
-            }
-        };
-        document.querySelector('.fixed.top-4.right-4 .bg-white').appendChild(clearBtn);
     });
 </script>
 
