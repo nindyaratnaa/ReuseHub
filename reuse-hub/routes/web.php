@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/chat', [PageController::class, 'chat']);
     Route::post('/chat/send', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('chat.send');
     Route::get('/chat/messages', [App\Http\Controllers\ChatController::class, 'getMessages'])->name('chat.messages');
+    Route::get('/chat/list', [App\Http\Controllers\ChatController::class, 'getChatList'])->name('chat.list');
     Route::get('/pesan', [PageController::class, 'pesan']);
     Route::get('/rating', [PageController::class, 'rating']);
     Route::post('/rating/submit', [App\Http\Controllers\ReviewController::class, 'store'])->name('rating.submit');
