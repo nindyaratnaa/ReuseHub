@@ -23,13 +23,13 @@
                 
                 <!-- Product Images -->
                 <div class="space-y-4">
-                    <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-                        <img src="{{ $item->foto ? (str_starts_with($item->foto, 'http') ? $item->foto : asset('storage/'.$item->foto)) : 'https://via.placeholder.com/600x400' }}" alt="{{ $item->nama_barang }}" class="w-full h-96 object-cover">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-sm h-full">
+                        <img src="{{ $item->foto ? (str_starts_with($item->foto, 'http') ? $item->foto : asset('storage/'.$item->foto)) : 'https://via.placeholder.com/600x400' }}" alt="{{ $item->nama_barang }}" class="w-full h-full object-cover">
                     </div>
                 </div>
 
                 <!-- Product Info -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="bg-white rounded-lg shadow-sm p-6 h-full">
                     <div class="mb-4">
                         <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">{{ $item->kategori }}</span>
                     </div>
@@ -57,7 +57,7 @@
                     </div>
 
                     <div class="border-t pt-6 mb-6">
-                        <div class="flex items-center gap-4">
+                        <a href="/review/{{ $item->user->id }}?from=item" class="flex items-center gap-4 hover:bg-gray-50 p-2 rounded-lg transition">
                             <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-semibold">
                                 {{ strtoupper(substr($item->user->name, 0, 2)) }}
                             </div>
@@ -74,7 +74,7 @@
                                     <span class="text-sm text-gray-500">{{ $item->created_at->diffForHumans() }}</span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
 
                     <div class="flex gap-4">

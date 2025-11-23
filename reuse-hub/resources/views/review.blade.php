@@ -7,15 +7,23 @@
     <section class="bg-white border-b border-gray-200 py-4">
         <div class="max-w-7xl mx-auto px-6">
             <nav class="flex items-center gap-2 text-sm text-gray-600">
-                <a href="/beranda" class="hover:text-green-600 transition">Beranda</a>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-                <a href="/profil" class="hover:text-green-600 transition">Profil</a>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-                <span class="text-gray-900 font-medium">Ulasan</span>
+                @if(request('from') == 'item')
+                    <a href="/tukar" class="hover:text-green-600 transition">Tukar Barang</a>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                    <span class="text-gray-900 font-medium">Ulasan {{ $user->name }}</span>
+                @else
+                    <a href="/beranda" class="hover:text-green-600 transition">Beranda</a>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                    <a href="/profil" class="hover:text-green-600 transition">Profil</a>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                    <span class="text-gray-900 font-medium">Ulasan</span>
+                @endif
             </nav>
         </div>
     </section>
