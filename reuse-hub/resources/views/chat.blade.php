@@ -18,46 +18,42 @@
 
     <!-- Chat Container -->
     <section class="py-6 bg-gray-50 min-h-screen">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden flex" style="height: 80vh;">
                 
-                <!-- Chat Header -->
-                <div class="bg-green-600 text-white p-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            @if(request('item_id') && isset($chatItem))
-                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                                <span class="font-semibold text-sm">{{ strtoupper(substr($chatItem->user->name, 0, 2)) }}</span>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold">{{ $chatItem->user->name }}</h3>
-                                <p class="text-green-100 text-sm">Online • Terakhir dilihat baru saja</p>
-                            </div>
-                            @else
-                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                                <span class="font-semibold text-sm">AR</span>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold">Ahmad Rizki</h3>
-                                <p class="text-green-100 text-sm">Online • Terakhir dilihat baru saja</p>
-                            </div>
-                            @endif
-                        </div>
-
+                <!-- Chat List Sidebar -->
+                <div class="w-1/3 border-r border-gray-200 flex flex-col">
+                    <!-- Sidebar Header -->
+                    <div class="p-4 border-b border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-900">Pesan</h2>
+                    </div>
+                    
+                    <!-- Chat List -->
+                    <div class="flex-1 overflow-y-auto" id="chatList">
+                        <!-- Chat list will be populated by JavaScript -->
                     </div>
                 </div>
+                
+                <!-- Chat Area -->
+                <div class="flex-1 flex flex-col" id="chatArea">
+                    <!-- Chat Header -->
+                    <div class="bg-green-600 text-white p-4 border-b border-green-700" id="chatHeader">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                <span class="font-semibold text-sm" id="chatHeaderInitials">?</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold" id="chatHeaderName">Pilih percakapan</h3>
+                                <p class="text-green-100 text-sm" id="chatHeaderStatus">Pilih chat untuk memulai percakapan</p>
+                            </div>
+                        </div>
+                    </div>
 
-                <!-- Exchange Item Display -->
-                @if(request('item_id'))
-                    @php
-                        $chatItem = App\Models\Item::find(request('item_id'));
-                    @endphp
-                    @if($chatItem)
-                    <div class="bg-blue-50 border-b border-blue-200 p-4">
+                    <!-- Exchange Item Display (conditional) -->
+                    <div class="bg-blue-50 border-b border-blue-200 p-4" id="itemDisplay" style="display: none;">
                         <div class="flex items-center gap-4">
                             <div class="flex-shrink-0">
-                                <img src="{{ $chatItem->foto ? asset('storage/'.$chatItem->foto) : 'https://via.placeholder.com/100' }}" 
-                                     alt="{{ $chatItem->nama_barang }}" class="w-16 h-16 object-cover rounded-lg">
+                                <img id="itemImage" src="" alt="" class="w-16 h-16 object-cover rounded-lg">
                             </div>
                             <div class="flex-1">
                                 <div class="flex items-center gap-2 mb-1">
@@ -67,13 +63,13 @@
                                     <span class="text-sm font-medium text-blue-800">Barang yang Ingin Ditukar</span>
                                 </div>
                                 <div class="flex items-center gap-2 mb-1">
-                                    <h4 class="font-semibold text-gray-900">{{ $chatItem->nama_barang }}</h4>
-                                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{{ $chatItem->kategori }}</span>
+                                    <h4 class="font-semibold text-gray-900" id="itemName"></h4>
+                                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium" id="itemCategory"></span>
                                 </div>
-                                <p class="text-sm text-gray-600">{{ $chatItem->lokasi }} • {{ $chatItem->kondisi }}</p>
+                                <p class="text-sm text-gray-600" id="itemDetails"></p>
                             </div>
                             <div class="text-right">
-                                <button onclick="window.location.href='/rating?user_id={{ $chatItem->user->id }}'" 
+                                <button onclick="completeTransaction()" 
                                         class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm transition flex items-center gap-1">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -83,136 +79,240 @@
                             </div>
                         </div>
                     </div>
-                    @endif
-                @endif
 
-                <!-- Chat Messages Area -->
-                <div class="h-96 overflow-y-auto p-4 space-y-4" id="chatMessages">
-                    <!-- Welcome Message -->
-                    <div class="text-center py-8">
-                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Mulai Percakapan</h3>
-                        <p class="text-gray-600 mb-6 max-w-md mx-auto">
-                            Jangan buang, ceritakan ulang! Tukar barang Anda, bantu yang membutuhkan, dan jadikan kebiasaan guna ulang sebagai gaya hidup baru kita. Mulai diskusi dengan pemilik barang untuk melakukan pertukaran yang saling menguntungkan.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Quick Reply Options -->
-                <div class="border-t border-gray-200 p-4 bg-gray-50">
-                    <div class="mb-4">
-                        <p class="text-sm font-medium text-gray-700 mb-3">Pilihan Pesan Cepat:</p>
-                        <div class="flex flex-wrap gap-2">
-                            <button onclick="sendQuickMessage('Halo! Saya tertarik dengan barang Anda. Bisakah kita diskusi lebih lanjut?')" 
-                                    class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
-                                💬 Silahkan Berdiskusi
-                            </button>
-                            <button onclick="sendQuickMessage('Saya ingin menukar barang ini. Apakah Anda berminat?')" 
-                                    class="bg-green-100 border border-green-300 text-green-700 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition">
-                                🔄 Saya Mau Tukar Barang
-                            </button>
-                            <button onclick="sendQuickMessage('Bisakah saya melihat foto barang dari sudut yang berbeda?')" 
-                                    class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
-                                📷 Minta Foto Tambahan
-                            </button>
-                            <button onclick="sendQuickMessage('Apakah barang masih tersedia untuk ditukar?')" 
-                                    class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
-                                ✅ Cek Ketersediaan
-                            </button>
-                            <button onclick="sendQuickMessage('Bisakah kita bertemu untuk melihat barang secara langsung?')" 
-                                    class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
-                                🤝 Ajukan Pertemuan
-                            </button>
-                            <button onclick="sendQuickMessage('Terima kasih atas responnya! Saya akan pertimbangkan dulu.')" 
-                                    class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
-                                🙏 Terima Kasih
-                            </button>
+                    <!-- Chat Messages Area -->
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4" id="chatMessages">
+                        <!-- Welcome Message -->
+                        <div class="text-center py-8">
+                            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Pilih Percakapan</h3>
+                            <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                                Pilih percakapan dari daftar di sebelah kiri untuk memulai chat.
+                            </p>
                         </div>
                     </div>
-                </div>
 
-                <!-- Message Input -->
-                <div class="border-t border-gray-200 p-4">
-                    <div class="flex items-end gap-3">
-                        <button onclick="document.getElementById('fileUpload').click()" class="p-2 text-gray-500 hover:text-gray-700 transition">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
-                            </svg>
-                        </button>
-                        <input type="file" id="fileUpload" accept="image/*,application/pdf,.doc,.docx" class="hidden" onchange="handleFileUpload(event)">
-                        <div class="flex-1">
-                            <textarea id="messageInput" 
-                                      placeholder="Ketik pesan Anda di sini..." 
-                                      class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                                      rows="1"
-                                      onkeypress="handleKeyPress(event)"></textarea>
+                    <!-- Quick Reply Options -->
+                    <div class="border-t border-gray-200 p-4 bg-gray-50" id="quickReplies" style="display: none;">
+                        <div class="mb-4">
+                            <p class="text-sm font-medium text-gray-700 mb-3">Pilihan Pesan Cepat:</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="sendQuickMessage('Halo! Saya tertarik dengan barang Anda. Bisakah kita diskusi lebih lanjut?')" 
+                                        class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
+                                    💬 Silahkan Berdiskusi
+                                </button>
+                                <button onclick="sendQuickMessage('Saya ingin menukar barang ini. Apakah Anda berminat?')" 
+                                        class="bg-green-100 border border-green-300 text-green-700 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition">
+                                    🔄 Saya Mau Tukar Barang
+                                </button>
+                                <button onclick="sendQuickMessage('Bisakah saya melihat foto barang dari sudut yang berbeda?')" 
+                                        class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
+                                    📷 Minta Foto Tambahan
+                                </button>
+                                <button onclick="sendQuickMessage('Apakah barang masih tersedia untuk ditukar?')" 
+                                        class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
+                                    ✅ Cek Ketersediaan
+                                </button>
+                                <button onclick="sendQuickMessage('Bisakah kita bertemu untuk melihat barang secara langsung?')" 
+                                        class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
+                                    🤝 Ajukan Pertemuan
+                                </button>
+                                <button onclick="sendQuickMessage('Terima kasih atas responnya! Saya akan pertimbangkan dulu.')" 
+                                        class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
+                                    🙏 Terima Kasih
+                                </button>
+                            </div>
                         </div>
-                        <button onclick="sendMessage()" 
-                                class="bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg transition duration-200">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                            </svg>
-                        </button>
+                    </div>
+
+                    <!-- Message Input -->
+                    <div class="border-t border-gray-200 p-4" id="messageInputArea" style="display: none;">
+                        <div class="flex items-end gap-3">
+                            <button onclick="document.getElementById('fileUpload').click()" class="p-2 text-gray-500 hover:text-gray-700 transition">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                                </svg>
+                            </button>
+                            <input type="file" id="fileUpload" accept="image/*,application/pdf,.doc,.docx" class="hidden" onchange="handleFileUpload(event)">
+                            <div class="flex-1">
+                                <textarea id="messageInput" 
+                                          placeholder="Ketik pesan Anda di sini..." 
+                                          class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                          rows="1"
+                                          onkeypress="handleKeyPress(event)"></textarea>
+                            </div>
+                            <button onclick="sendMessage()" 
+                                    class="bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg transition duration-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
     </section>
 
 <script>
-    let lastMessageId = 0;
-    const currentUserId = {{ auth()->id() }};
-    const currentUserName = '{{ auth()->user()->name }}';
-    const currentUserInitials = '{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}';
-    const itemId = {{ request('item_id') ?? 'null' }};
+    let messageCount = 0;
+    let activeChat = null;
+    const currentUserId = {{ auth()->id() ?? 1 }};
+    const currentUserName = '{{ auth()->user()->name ?? "Jerome Polin" }}';
+    const currentUserInitials = '{{ strtoupper(substr(auth()->user()->name ?? "Jerome Polin", 0, 2)) }}';
+    const itemId = '{{ request("item_id") ?? "" }}';
     const csrfToken = '{{ csrf_token() }}';
 
+    // Get all available chats from localStorage
+    function getAllChats() {
+        const allChats = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('reusehub_chat_')) {
+                const chatId = key.replace('reusehub_chat_', '');
+                const messages = JSON.parse(localStorage.getItem(key) || '[]');
+                if (messages.length > 0) {
+                    const lastMessage = messages[messages.length - 1];
+                    const otherUserId = lastMessage.sender_id === currentUserId ? 
+                        messages.find(m => m.sender_id !== currentUserId)?.sender_id : lastMessage.sender_id;
+                    const otherUser = messages.find(m => m.sender_id === otherUserId);
+                    
+                    if (otherUser) {
+                        allChats.push({
+                            chatId: chatId,
+                            otherUser: {
+                                id: otherUser.sender_id,
+                                name: otherUser.sender_name,
+                                initials: otherUser.sender_initials
+                            },
+                            lastMessage: lastMessage.message,
+                            timestamp: lastMessage.timestamp,
+                            unread: false
+                        });
+                    }
+                }
+            }
+        }
+        return allChats.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    }
+
+    function renderChatList() {
+        const chatList = document.getElementById('chatList');
+        const chats = getAllChats();
+        
+        if (chats.length === 0) {
+            chatList.innerHTML = `
+                <div class="p-4 text-center text-gray-500">
+                    <p class="text-sm">Belum ada percakapan</p>
+                </div>
+            `;
+            return;
+        }
+        
+        chatList.innerHTML = chats.map(chat => `
+            <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition" 
+                 onclick="openChat('${chat.chatId}', '${chat.otherUser.name}', '${chat.otherUser.initials}')">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-white text-sm font-semibold">${chat.otherUser.initials}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between mb-1">
+                            <h4 class="font-semibold text-gray-900 truncate">${chat.otherUser.name}</h4>
+                            <span class="text-xs text-gray-500">${formatTime(chat.timestamp)}</span>
+                        </div>
+                        <p class="text-sm text-gray-600 truncate">${chat.lastMessage}</p>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function formatTime(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diff = now - date;
+        
+        if (diff < 60000) return 'Baru saja';
+        if (diff < 3600000) return Math.floor(diff / 60000) + ' menit';
+        if (diff < 86400000) return Math.floor(diff / 3600000) + ' jam';
+        return Math.floor(diff / 86400000) + ' hari';
+    }
+
+    function openChat(chatId, userName, userInitials) {
+        activeChat = chatId;
+        
+        // Update chat header
+        document.getElementById('chatHeaderName').textContent = userName;
+        document.getElementById('chatHeaderInitials').textContent = userInitials;
+        document.getElementById('chatHeaderStatus').textContent = 'Online • Terakhir dilihat baru saja';
+        
+        // Show chat elements
+        document.getElementById('quickReplies').style.display = 'block';
+        document.getElementById('messageInputArea').style.display = 'block';
+        
+        // Load messages for this chat
+        loadMessages(chatId);
+    }
+
     function sendQuickMessage(message) {
+        if (!activeChat) return;
         sendMessage(message);
     }
 
     function sendMessage(customMessage = null) {
+        if (!activeChat) return;
+        
         const messageInput = document.getElementById('messageInput');
         const message = customMessage || messageInput.value.trim();
         
-        if (!message || !itemId) return;
+        if (!message) return;
         
-        // Clear input immediately
+        const chatKey = `reusehub_chat_${activeChat}`;
+        const chatMessages = document.getElementById('chatMessages');
+        
+        // Clear welcome message on first message
+        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        if (messages.length === 0) {
+            chatMessages.innerHTML = '';
+        }
+        
+        // Save message to localStorage
+        saveMessage(message, activeChat);
+        
+        // Add user message immediately
+        addUserMessage(message);
+        
+        // Clear input if not custom message
         if (!customMessage) {
             messageInput.value = '';
         }
         
-        // Send via AJAX
-        fetch('/chat/send', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            body: JSON.stringify({
-                item_id: itemId,
-                message: message
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const chatMessages = document.getElementById('chatMessages');
-                const welcomeMsg = chatMessages.querySelector('.text-center.py-8');
-                if (welcomeMsg) {
-                    chatMessages.innerHTML = '';
-                }
-                addUserMessage(data.message.message, data.message.created_at);
-                lastMessageId = data.message.id;
-            }
-        })
-        .catch(error => console.error('Error:', error));
+        messageCount++;
+        
+        // Update chat list
+        renderChatList();
+    }
+
+    function saveMessage(message, chatId) {
+        const chatKey = `reusehub_chat_${chatId}`;
+        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        
+        const newMessage = {
+            id: Date.now(),
+            message: message,
+            sender_id: currentUserId,
+            sender_name: currentUserName,
+            sender_initials: currentUserInitials,
+            item_id: chatId,
+            timestamp: new Date().toISOString()
+        };
+        messages.push(newMessage);
+        localStorage.setItem(chatKey, JSON.stringify(messages));
     }
 
     function addUserMessage(message, time = 'Baru saja') {
@@ -222,7 +322,7 @@
         userMessageDiv.innerHTML = `
             <div class="max-w-xs lg:max-w-md">
                 <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
-                    <p class="text-sm">${escapeHtml(message)}</p>
+                    <p class="text-sm">${message}</p>
                 </div>
                 <p class="text-xs text-gray-500 mt-1 text-right">${time}</p>
             </div>
@@ -245,7 +345,7 @@
                     <span class="text-sm font-medium text-gray-900">${senderName}</span>
                 </div>
                 <div class="bg-gray-100 text-gray-900 p-3 rounded-lg rounded-bl-none">
-                    <p class="text-sm">${escapeHtml(message)}</p>
+                    <p class="text-sm">${message}</p>
                 </div>
                 <p class="text-xs text-gray-500 mt-1">${time}</p>
             </div>
@@ -255,59 +355,61 @@
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    function loadMessages() {
-        if (!itemId) return;
+    function loadMessages(chatId) {
+        const chatKey = `reusehub_chat_${chatId}`;
+        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        const chatMessages = document.getElementById('chatMessages');
         
-        fetch(`/chat/messages?item_id=${itemId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success && data.messages.length > 0) {
-                const chatMessages = document.getElementById('chatMessages');
-                chatMessages.innerHTML = '';
-                
-                data.messages.forEach(msg => {
-                    if (msg.sender_id === currentUserId) {
-                        addUserMessage(msg.message, msg.created_at);
-                    } else {
-                        addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials, msg.created_at);
-                    }
-                    lastMessageId = Math.max(lastMessageId, msg.id);
-                });
-            }
-        })
-        .catch(error => console.error('Error:', error));
+        if (messages.length > 0) {
+            chatMessages.innerHTML = '';
+            messageCount = messages.length;
+            
+            messages.forEach(msg => {
+                if (msg.sender_id === currentUserId) {
+                    addUserMessage(msg.message, formatTime(msg.timestamp));
+                } else {
+                    addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials, formatTime(msg.timestamp));
+                }
+            });
+        } else {
+            chatMessages.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Mulai Percakapan</h3>
+                    <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                        Mulai diskusi dengan mengirim pesan pertama.
+                    </p>
+                </div>
+            `;
+        }
     }
 
     function checkNewMessages() {
-        if (!itemId) return;
+        if (!activeChat) return;
         
-        fetch(`/chat/messages?item_id=${itemId}&last_id=${lastMessageId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success && data.messages.length > 0) {
-                const chatMessages = document.getElementById('chatMessages');
-                const welcomeMsg = chatMessages.querySelector('.text-center.py-8');
-                if (welcomeMsg) {
-                    chatMessages.innerHTML = '';
+        const chatKey = `reusehub_chat_${activeChat}`;
+        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        
+        if (messages.length > messageCount) {
+            const newMessages = messages.slice(messageCount);
+            
+            newMessages.forEach(msg => {
+                if (msg.sender_id !== currentUserId) {
+                    addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials, formatTime(msg.timestamp));
                 }
-                
-                data.messages.forEach(msg => {
-                    if (msg.sender_id === currentUserId) {
-                        addUserMessage(msg.message, msg.created_at);
-                    } else {
-                        addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials, msg.created_at);
-                    }
-                    lastMessageId = Math.max(lastMessageId, msg.id);
-                });
-            }
-        })
-        .catch(error => console.error('Error:', error));
+            });
+            
+            messageCount = messages.length;
+            renderChatList();
+        }
     }
 
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+    function completeTransaction() {
+        alert('Fitur transaksi selesai akan segera tersedia!');
     }
 
     function handleKeyPress(event) {
@@ -317,21 +419,10 @@
         }
     }
 
-    // Auto-resize textarea
-    document.getElementById('messageInput').addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-    });
-
-    // Handle file upload (demo)
     function handleFileUpload(event) {
         const file = event.target.files[0];
-        if (file) {
+        if (file && activeChat) {
             const chatMessages = document.getElementById('chatMessages');
-            
-            if (messageCount === 0) {
-                chatMessages.innerHTML = '';
-            }
             
             const fileMessageDiv = document.createElement('div');
             fileMessageDiv.className = 'flex justify-end';
@@ -372,9 +463,9 @@
             chatMessages.appendChild(fileMessageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
             
-            // Save file message
-            saveMessage(`📷 ${file.name}`);
+            saveMessage(`📷 ${file.name}`, activeChat);
             messageCount++;
+            renderChatList();
             
             event.target.value = '';
         }
@@ -382,10 +473,37 @@
 
     // Initialize chat
     document.addEventListener('DOMContentLoaded', function() {
+        renderChatList();
+        
+        // If there's an item_id, create/open that specific chat
         if (itemId) {
-            loadMessages();
-            // Check for new messages every 2 seconds
-            setInterval(checkNewMessages, 2000);
+            const chatKey = `reusehub_chat_${itemId}`;
+            const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+            
+            if (messages.length === 0) {
+                const otherUserName = 'Ahmad Rizki';
+                const otherUserInitials = 'AR';
+                openChat(itemId, otherUserName, otherUserInitials);
+            } else {
+                const lastMessage = messages[messages.length - 1];
+                const otherUser = messages.find(m => m.sender_id !== currentUserId);
+                if (otherUser) {
+                    openChat(itemId, otherUser.sender_name, otherUser.sender_initials);
+                }
+            }
+        }
+        
+        // Check for new messages every 2 seconds
+        setInterval(checkNewMessages, 2000);
+        setInterval(renderChatList, 5000);
+        
+        // Auto-resize textarea
+        const messageInput = document.getElementById('messageInput');
+        if (messageInput) {
+            messageInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            });
         }
     });
 </script>
