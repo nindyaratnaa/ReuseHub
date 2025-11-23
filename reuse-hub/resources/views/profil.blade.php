@@ -148,11 +148,11 @@
                                 </div>
                                 <div class="flex gap-2 mt-auto">
                                     <button onclick="editItem({{ $item->id }})" 
-                                            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition">
+                                            class="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm transition">
                                         Edit
                                     </button>
                                     <button onclick="deleteItem({{ $item->id }})" 
-                                            class="flex-1 bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm transition">
+                                            class="flex-1 border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-3 py-2 rounded-lg text-sm transition">
                                         Hapus
                                     </button>
                                 </div>
