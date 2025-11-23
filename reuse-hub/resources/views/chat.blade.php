@@ -100,34 +100,32 @@
 
                     <!-- Quick Reply Options -->
                     <div class="border-t border-gray-200 p-4 bg-gray-50" id="quickReplies" style="display: none;">
-                        <div class="mb-4">
-                            <p class="text-sm font-medium text-gray-700 mb-3">Pilihan Pesan Cepat:</p>
-                            <div class="flex flex-wrap gap-2">
-                                <button onclick="sendQuickMessage('Halo! Saya tertarik dengan barang Anda. Bisakah kita diskusi lebih lanjut?')" 
-                                        class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
-                                    💬 Silahkan Berdiskusi
-                                </button>
-                                <button onclick="sendQuickMessage('Saya ingin menukar barang ini. Apakah Anda berminat?')" 
-                                        class="bg-green-100 border border-green-300 text-green-700 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition">
-                                    🔄 Saya Mau Tukar Barang
-                                </button>
-                                <button onclick="sendQuickMessage('Bisakah saya melihat foto barang dari sudut yang berbeda?')" 
-                                        class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
-                                    📷 Minta Foto Tambahan
-                                </button>
-                                <button onclick="sendQuickMessage('Apakah barang masih tersedia untuk ditukar?')" 
-                                        class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
-                                    ✅ Cek Ketersediaan
-                                </button>
-                                <button onclick="sendQuickMessage('Bisakah kita bertemu untuk melihat barang secara langsung?')" 
-                                        class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
-                                    🤝 Ajukan Pertemuan
-                                </button>
-                                <button onclick="sendQuickMessage('Terima kasih atas responnya! Saya akan pertimbangkan dulu.')" 
-                                        class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
-                                    🙏 Terima Kasih
-                                </button>
-                            </div>
+                        <p class="text-sm font-medium text-gray-700 mb-3">Pilihan Pesan Cepat:</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="sendQuickMessage('Halo! Saya tertarik dengan barang Anda. Bisakah kita diskusi lebih lanjut?')" 
+                                    class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
+                                💬 Silahkan Berdiskusi
+                            </button>
+                            <button onclick="sendQuickMessage('Saya ingin menukar barang ini. Apakah Anda berminat?')" 
+                                    class="bg-green-100 border border-green-300 text-green-700 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition">
+                                🔄 Saya Mau Tukar Barang
+                            </button>
+                            <button onclick="sendQuickMessage('Bisakah saya melihat foto barang dari sudut yang berbeda?')" 
+                                    class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
+                                📷 Minta Foto Tambahan
+                            </button>
+                            <button onclick="sendQuickMessage('Apakah barang masih tersedia untuk ditukar?')" 
+                                    class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
+                                ✅ Cek Ketersediaan
+                            </button>
+                            <button onclick="sendQuickMessage('Bisakah kita bertemu untuk melihat barang secara langsung?')" 
+                                    class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
+                                🤝 Ajukan Pertemuan
+                            </button>
+                            <button onclick="sendQuickMessage('Terima kasih atas responnya! Saya akan pertimbangkan dulu.')" 
+                                    class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition">
+                                🙏 Terima Kasih
+                            </button>
                         </div>
                     </div>
 
