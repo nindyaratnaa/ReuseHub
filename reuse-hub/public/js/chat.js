@@ -15,6 +15,26 @@ function initChat(currentUserId, itemId, itemData) {
     }
     
     chatListInterval = setInterval(loadChatList, 5000);
+    setInterval(updateTimestamps, 60000);
+}
+
+function updateTimestamps() {
+    document.querySelectorAll('[data-timestamp]').forEach(el => {
+        const timestamp = el.getAttribute('data-timestamp');
+        el.textContent = formatRelativeTime(timestamp);
+    });
+}
+
+function formatRelativeTime(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now - date;
+    
+    if (diff < 60000) return 'Baru saja';
+    if (diff < 3600000) return Math.floor(diff / 60000) + ' menit yang lalu';
+    if (diff < 86400000) return Math.floor(diff / 3600000) + ' jam yang lalu';
+    if (diff < 604800000) return Math.floor(diff / 86400000) + ' hari yang lalu';
+    return date.toLocaleDateString('id-ID');
 }
 
 function loadChatList() {
@@ -142,9 +162,9 @@ function loadMessages() {
             } else {
                 data.messages.forEach(msg => {
                     if (msg.sender_id === window.currentUserId) {
-                        addUserMessage(msg.message, msg.created_at);
+                        addUserMessage(msg.message, msg.created_at, msg.timestamp);
                     } else {
-                        addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials, msg.created_at);
+                        addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials, msg.created_at, msg.timestamp);
                     }
                     lastMessageId = Math.max(lastMessageId, msg.id);
                 });
@@ -168,7 +188,7 @@ function checkNewMessages() {
         if (data.success && data.messages.length > 0) {
             data.messages.forEach(msg => {
                 if (msg.sender_id !== window.currentUserId) {
-                    addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials, msg.created_at);
+                    addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials, msg.created_at, msg.timestamp);
                 }
                 lastMessageId = Math.max(lastMessageId, msg.id);
             });
@@ -211,7 +231,7 @@ function sendMessage(customMessage = null) {
                 chatMessages.innerHTML = '';
             }
             
-            addUserMessage(data.message.message, data.message.created_at);
+            addUserMessage(data.message.message, data.message.created_at, data.message.timestamp);
             lastMessageId = Math.max(lastMessageId, data.message.id);
             
             if (!customMessage) {
@@ -229,7 +249,7 @@ function sendQuickMessage(message) {
     sendMessage(message);
 }
 
-function addUserMessage(message, time) {
+function addUserMessage(message, time, timestamp) {
     const chatMessages = document.getElementById('chatMessages');
     const userMessageDiv = document.createElement('div');
     userMessageDiv.className = 'flex justify-end';
@@ -238,7 +258,7 @@ function addUserMessage(message, time) {
             <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
                 <p class="text-sm">${escapeHtml(message)}</p>
             </div>
-            <p class="text-xs text-gray-500 mt-1 text-right">${time}</p>
+            <p class="text-xs text-gray-500 mt-1 text-right" data-timestamp="${timestamp || new Date().toISOString()}">${time}</p>
         </div>
     `;
     
@@ -246,7 +266,7 @@ function addUserMessage(message, time) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-function addReceivedMessage(message, senderName, senderInitials, time) {
+function addReceivedMessage(message, senderName, senderInitials, time, timestamp) {
     const chatMessages = document.getElementById('chatMessages');
     const messageDiv = document.createElement('div');
     messageDiv.className = 'flex justify-start';
@@ -261,7 +281,7 @@ function addReceivedMessage(message, senderName, senderInitials, time) {
             <div class="bg-gray-100 text-gray-900 p-3 rounded-lg rounded-bl-none">
                 <p class="text-sm">${escapeHtml(message)}</p>
             </div>
-            <p class="text-xs text-gray-500 mt-1">${time}</p>
+            <p class="text-xs text-gray-500 mt-1" data-timestamp="${timestamp || new Date().toISOString()}">${time}</p>
         </div>
     `;
     
