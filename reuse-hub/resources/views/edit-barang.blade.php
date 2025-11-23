@@ -63,12 +63,12 @@
                             <select id="kategori" name="kategori" required
                                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 <option value="">Pilih Kategori</option>
-                                <option value="elektronik" {{ $item->kategori == 'elektronik' ? 'selected' : '' }}>Elektronik</option>
-                                <option value="furniture" {{ $item->kategori == 'furniture' ? 'selected' : '' }}>Furniture</option>
-                                <option value="pakaian" {{ $item->kategori == 'pakaian' ? 'selected' : '' }}>Pakaian</option>
-                                <option value="buku" {{ $item->kategori == 'buku' ? 'selected' : '' }}>Buku</option>
-                                <option value="olahraga" {{ $item->kategori == 'olahraga' ? 'selected' : '' }}>Olahraga</option>
-                                <option value="lainnya" {{ $item->kategori == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                                <option value="Elektronik">Elektronik</option>
+                                <option value="Buku & Majalah">Buku & Majalah</option>
+                                <option value="Pakaian">Pakaian</option>
+                                <option value="Perabot">Perabot</option>
+                                <option value="Mainan">Mainan</option>
+                                <option value="Olahraga">Olahraga</option>
                             </select>
                         </div>
 
@@ -77,20 +77,29 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Kondisi *</label>
                             <select id="kondisi" name="kondisi" required
                                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                                <option value="">Pilih Kondisi</option>
-                                <option value="baru" {{ $item->kondisi == 'baru' ? 'selected' : '' }}>Baru</option>
-                                <option value="seperti_baru" {{ $item->kondisi == 'seperti_baru' ? 'selected' : '' }}>Seperti Baru</option>
-                                <option value="baik" {{ $item->kondisi == 'baik' ? 'selected' : '' }}>Baik</option>
-                                <option value="cukup" {{ $item->kondisi == 'cukup' ? 'selected' : '' }}>Cukup</option>
+                                <option value="">Kondisi Barang</option>
+                                <option value="Buku & Majalah">Seperti Baru</option>
+                                <option value="Pakaian">Baik</option>
+                                <option value="Pakaian">Cukup</option>
                             </select>
                         </div>
 
                         <!-- Lokasi -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi *</label>
-                            <input type="text" id="lokasi" name="lokasi" value="{{ $item->lokasi }}" required
-                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                                   placeholder="Contoh: Jakarta Selatan">
+                            <select id="lokasi" name="lokasi"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none" required>
+                                <option value="">Pilih Lokasi</option>
+                                <option value="Jakarta">Jakarta</option>
+                                <option value="Jakarta Selatan">Jakarta Selatan</option>
+                                <option value="Jakarta Pusat">Jakarta Pusat</option>
+                                <option value="Bandung">Bandung</option>
+                                <option value="Surabaya">Surabaya</option>
+                                <option value="Medan">Medan</option>
+                                <option value="Yogyakarta">Yogyakarta</option>
+                                <option value="Semarang">Semarang</option>
+                            </select>
+                            <p id="lokasiError" class="text-red-500 text-sm mt-1 hidden">Lokasi wajib dipilih</p>
                         </div>
 
                         <!-- Deskripsi -->
