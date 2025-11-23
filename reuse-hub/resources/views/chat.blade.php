@@ -166,6 +166,30 @@
     const currentUserInitials = '{{ strtoupper(substr(auth()->user()->name ?? "Jerome Polin", 0, 2)) }}';
     const itemId = '{{ request("item_id") ?? "" }}';
     const csrfToken = '{{ csrf_token() }}';
+    
+    @if(request('item_id'))
+        @php
+            $chatItem = App\Models\Item::find(request('item_id'));
+        @endphp
+        @if($chatItem)
+        const itemData = {
+            id: {{ $chatItem->id }},
+            name: '{{ $chatItem->nama_barang }}',
+            category: '{{ $chatItem->kategori }}',
+            location: '{{ $chatItem->lokasi }}',
+            condition: '{{ $chatItem->kondisi }}',
+            image: '{{ $chatItem->foto ? ($chatItem->foto.startsWith('http') ? $chatItem->foto : asset('storage/'.$chatItem->foto)) : 'https://via.placeholder.com/100' }}',
+            owner: {
+                name: '{{ $chatItem->user->name }}',
+                initials: '{{ strtoupper(substr($chatItem->user->name, 0, 2)) }}'
+            }
+        };
+        @else
+        const itemData = null;
+        @endif
+    @else
+        const itemData = null;
+    @endif
 
     // Get all available chats from localStorage
     function getAllChats() {
@@ -480,15 +504,28 @@
             const chatKey = `reusehub_chat_${itemId}`;
             const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
             
-            if (messages.length === 0) {
-                const otherUserName = 'Ahmad Rizki';
-                const otherUserInitials = 'AR';
-                openChat(itemId, otherUserName, otherUserInitials);
+            // Show item display for item-specific chat
+            const itemDisplay = document.getElementById('itemDisplay');
+            if (itemDisplay && itemData) {
+                itemDisplay.style.display = 'block';
+                
+                // Populate item details
+                document.getElementById('itemImage').src = itemData.image;
+                document.getElementById('itemImage').alt = itemData.name;
+                document.getElementById('itemName').textContent = itemData.name;
+                document.getElementById('itemCategory').textContent = itemData.category;
+                document.getElementById('itemDetails').textContent = itemData.location + ' • ' + itemData.condition;
+            }
+            
+            if (messages.length === 0 && itemData) {
+                openChat(itemId, itemData.owner.name, itemData.owner.initials);
             } else {
                 const lastMessage = messages[messages.length - 1];
                 const otherUser = messages.find(m => m.sender_id !== currentUserId);
                 if (otherUser) {
                     openChat(itemId, otherUser.sender_name, otherUser.sender_initials);
+                } else if (itemData) {
+                    openChat(itemId, itemData.owner.name, itemData.owner.initials);
                 }
             }
         }
