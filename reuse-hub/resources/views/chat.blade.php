@@ -166,12 +166,11 @@
     </section>
 
 <script>
-    let messageCount = 0;
-    const currentUserId = {{ auth()->id() ?? 1 }}; // ID user yang sedang login
-    const currentUserName = '{{ auth()->user()->name ?? "Jerome Polin" }}';
-    const currentUserInitials = '{{ strtoupper(substr(auth()->user()->name ?? "Jerome Polin", 0, 2)) }}';
-    const itemId = '{{ request("item_id") ?? "1" }}';
-    const chatKey = `reusehub_chat_${itemId}`;
+    let lastMessageId = 0;
+    const currentUserId = {{ auth()->id() }};
+    const currentUserName = '{{ auth()->user()->name }}';
+    const currentUserInitials = '{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}';
+    const itemId = {{ request('item_id') ?? 'null' }};
     const csrfToken = '{{ csrf_token() }}';
 
     function sendQuickMessage(message) {
@@ -182,56 +181,50 @@
         const messageInput = document.getElementById('messageInput');
         const message = customMessage || messageInput.value.trim();
         
-        if (!message) return;
+        if (!message || !itemId) return;
         
-        const chatMessages = document.getElementById('chatMessages');
-        
-        // Clear welcome message on first message
-        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
-        if (messages.length === 0) {
-            chatMessages.innerHTML = '';
-        }
-        
-        // Save message to localStorage
-        saveMessage(message);
-        
-        // Add user message immediately
-        addUserMessage(message);
-        
-        // Clear input if not custom message
+        // Clear input immediately
         if (!customMessage) {
             messageInput.value = '';
         }
         
-        messageCount++;
+        // Send via AJAX
+        fetch('/chat/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                item_id: itemId,
+                message: message
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const chatMessages = document.getElementById('chatMessages');
+                const welcomeMsg = chatMessages.querySelector('.text-center.py-8');
+                if (welcomeMsg) {
+                    chatMessages.innerHTML = '';
+                }
+                addUserMessage(data.message.message, data.message.created_at);
+                lastMessageId = data.message.id;
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
 
-    function saveMessage(message) {
-        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
-        
-        const newMessage = {
-            id: Date.now(),
-            message: message,
-            sender_id: currentUserId,
-            sender_name: currentUserName,
-            sender_initials: currentUserInitials,
-            item_id: itemId,
-            timestamp: new Date().toISOString()
-        };
-        messages.push(newMessage);
-        localStorage.setItem(chatKey, JSON.stringify(messages));
-    }
-
-    function addUserMessage(message) {
+    function addUserMessage(message, time = 'Baru saja') {
         const chatMessages = document.getElementById('chatMessages');
         const userMessageDiv = document.createElement('div');
         userMessageDiv.className = 'flex justify-end';
         userMessageDiv.innerHTML = `
             <div class="max-w-xs lg:max-w-md">
                 <div class="bg-green-600 text-white p-3 rounded-lg rounded-br-none">
-                    <p class="text-sm">${message}</p>
+                    <p class="text-sm">${escapeHtml(message)}</p>
                 </div>
-                <p class="text-xs text-gray-500 mt-1 text-right">Baru saja</p>
+                <p class="text-xs text-gray-500 mt-1 text-right">${time}</p>
             </div>
         `;
         
@@ -239,7 +232,7 @@
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    function addReceivedMessage(message, senderName, senderInitials) {
+    function addReceivedMessage(message, senderName, senderInitials, time = 'Baru saja') {
         const chatMessages = document.getElementById('chatMessages');
         const messageDiv = document.createElement('div');
         messageDiv.className = 'flex justify-start';
@@ -252,9 +245,9 @@
                     <span class="text-sm font-medium text-gray-900">${senderName}</span>
                 </div>
                 <div class="bg-gray-100 text-gray-900 p-3 rounded-lg rounded-bl-none">
-                    <p class="text-sm">${message}</p>
+                    <p class="text-sm">${escapeHtml(message)}</p>
                 </div>
-                <p class="text-xs text-gray-500 mt-1">Baru saja</p>
+                <p class="text-xs text-gray-500 mt-1">${time}</p>
             </div>
         `;
         
@@ -263,55 +256,58 @@
     }
 
     function loadMessages() {
-        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
-        const chatMessages = document.getElementById('chatMessages');
+        if (!itemId) return;
         
-        if (messages.length > 0) {
-            chatMessages.innerHTML = '';
-            messageCount = messages.length;
-            
-            messages.forEach(msg => {
-                if (msg.sender_id === currentUserId) {
-                    // Pesan yang saya kirim
-                    addUserMessage(msg.message);
-                } else {
-                    // Pesan yang saya terima
-                    addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials);
-                }
-            });
-        } else {
-            // Show welcome message if no messages
-            chatMessages.innerHTML = `
-                <div class="text-center py-8">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Mulai Percakapan</h3>
-                    <p class="text-gray-600 mb-6 max-w-md mx-auto">
-                        Jangan buang, ceritakan ulang! Tukar barang Anda, bantu yang membutuhkan, dan jadikan kebiasaan guna ulang sebagai gaya hidup baru kita. Mulai diskusi dengan pemilik barang untuk melakukan pertukaran yang saling menguntungkan.
-                    </p>
-                </div>
-            `;
-        }
+        fetch(`/chat/messages?item_id=${itemId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.messages.length > 0) {
+                const chatMessages = document.getElementById('chatMessages');
+                chatMessages.innerHTML = '';
+                
+                data.messages.forEach(msg => {
+                    if (msg.sender_id === currentUserId) {
+                        addUserMessage(msg.message, msg.created_at);
+                    } else {
+                        addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials, msg.created_at);
+                    }
+                    lastMessageId = Math.max(lastMessageId, msg.id);
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
 
     function checkNewMessages() {
-        const messages = JSON.parse(localStorage.getItem(chatKey) || '[]');
+        if (!itemId) return;
         
-        if (messages.length > messageCount) {
-            const newMessages = messages.slice(messageCount);
-            
-            newMessages.forEach(msg => {
-                if (msg.sender_id !== currentUserId) {
-                    // Pesan baru dari orang lain
-                    addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials);
+        fetch(`/chat/messages?item_id=${itemId}&last_id=${lastMessageId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.messages.length > 0) {
+                const chatMessages = document.getElementById('chatMessages');
+                const welcomeMsg = chatMessages.querySelector('.text-center.py-8');
+                if (welcomeMsg) {
+                    chatMessages.innerHTML = '';
                 }
-            });
-            
-            messageCount = messages.length;
-        }
+                
+                data.messages.forEach(msg => {
+                    if (msg.sender_id === currentUserId) {
+                        addUserMessage(msg.message, msg.created_at);
+                    } else {
+                        addReceivedMessage(msg.message, msg.sender_name, msg.sender_initials, msg.created_at);
+                    }
+                    lastMessageId = Math.max(lastMessageId, msg.id);
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     function handleKeyPress(event) {
@@ -386,10 +382,11 @@
 
     // Initialize chat
     document.addEventListener('DOMContentLoaded', function() {
-        loadMessages();
-        
-        // Check for new messages every 2 seconds (real-time simulation)
-        setInterval(checkNewMessages, 2000);
+        if (itemId) {
+            loadMessages();
+            // Check for new messages every 2 seconds
+            setInterval(checkNewMessages, 2000);
+        }
     });
 </script>
 
