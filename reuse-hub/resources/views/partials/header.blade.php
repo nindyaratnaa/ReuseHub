@@ -16,6 +16,9 @@
             <a href="{{ url('/tukar') }}" class="block hover:text-green-400 relative group transition-colors">Tukar
                 <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </a>
+            <a href="{{ url('/chat') }}" class="block hover:text-green-400 relative group transition-colors">Pesan
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
+            </a>
             <a href="{{ url('/profil') }}" class="block hover:text-green-400 relative group transition-colors">Profil
                 <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
             </a>
@@ -41,6 +44,7 @@
             <a href="{{ url('/beranda') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Beranda</a>
             <a href="{{ url('/tentang') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Tentang Kami</a>
             <a href="{{ url('/tukar') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Tukar</a>
+            <a href="{{ url('/chat') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Pesan</a>
             <a href="{{ url('/profil') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 transition">Profil</a>
             <hr class="border-gray-200 dark:border-gray-700">
             <a href="{{ url('/unggah') }}" class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg text-center"> Unggah Barang</a>
