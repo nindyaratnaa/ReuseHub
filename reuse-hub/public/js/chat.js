@@ -15,7 +15,7 @@ function initChat(currentUserId, itemId, itemData) {
     }
     
     chatListInterval = setInterval(loadChatList, 5000);
-    setInterval(updateTimestamps, 60000);
+    setInterval(updateTimestamps, 1000);
 }
 
 function updateTimestamps() {
