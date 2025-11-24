@@ -78,9 +78,9 @@
                             <select id="kondisi" name="kondisi" required
                                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 <option value="">Kondisi Barang</option>
-                                <option value="Buku & Majalah">Seperti Baru</option>
-                                <option value="Pakaian">Baik</option>
-                                <option value="Pakaian">Cukup</option>
+                                <option value="Seperti Baru">Seperti Baru</option>
+                                <option value="Baik">Baik</option>
+                                <option value="Cukup">Cukup</option>
                             </select>
                         </div>
 

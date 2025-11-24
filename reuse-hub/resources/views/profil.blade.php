@@ -138,7 +138,7 @@
                                     <p class="text-sm text-gray-600 mb-2 h-10 overflow-hidden">{{ Str::limit($item->deskripsi, 80) }}</p>
                                     <div class="flex items-center justify-between mb-2">
                                         <span class="text-sm text-gray-600">{{ $item->kategori }}</span>
-                                        <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
                                             {{ ucfirst($item->kondisi) }}
                                         </span>
                                     </div>
