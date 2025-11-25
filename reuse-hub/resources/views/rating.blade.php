@@ -256,6 +256,7 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('user_id');
+        const itemId = urlParams.get('item_id');
 
         if (!userId) {
             alert('User ID tidak ditemukan');
@@ -279,7 +280,8 @@
                 body: JSON.stringify({
                     user_id: userId,
                     rating: selectedRating,
-                    komentar: komentar
+                    komentar: komentar,
+                    item_id: itemId
                 })
             });
 

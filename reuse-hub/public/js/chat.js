@@ -311,7 +311,7 @@ function completeTransaction() {
     if (!activeChat) return;
     
     if (confirm('Apakah transaksi sudah selesai? Anda akan diarahkan untuk memberikan review.')) {
-        window.location.href = `/rating?user_id=${activeChat.other_user_id}`;
+        window.location.href = `/rating?user_id=${activeChat.other_user_id}&item_id=${activeChat.item_id}`;
     }
 }
 

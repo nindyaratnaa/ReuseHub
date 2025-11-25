@@ -12,12 +12,17 @@ class ReviewController extends Controller
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'rating' => 'required|integer|min:1|max:5',
-            'komentar' => 'nullable|string'
+            'komentar' => 'nullable|string',
+            'item_id' => 'nullable|exists:items,id'
         ]);
 
         $validated['reviewer_id'] = auth()->id();
 
         Review::create($validated);
+
+        if ($request->item_id) {
+            \App\Models\Item::where('id', $request->item_id)->delete();
+        }
 
         return response()->json([
             'success' => true,
