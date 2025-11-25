@@ -308,7 +308,11 @@ function escapeHtml(text) {
 }
 
 function completeTransaction() {
-    alert('Fitur transaksi selesai akan segera tersedia!');
+    if (!activeChat) return;
+    
+    if (confirm('Apakah transaksi sudah selesai? Anda akan diarahkan untuk memberikan review.')) {
+        window.location.href = `/rating?user_id=${activeChat.other_user_id}`;
+    }
 }
 
 function handleFileUpload(event) {
