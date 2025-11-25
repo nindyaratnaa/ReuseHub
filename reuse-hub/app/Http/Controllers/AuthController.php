@@ -52,6 +52,10 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
         $validator = Validator::make($request->all(), [
             'emailUsername' => 'required|string',
             'password' => 'required|string',
@@ -64,7 +68,6 @@ class AuthController extends Controller
             ], 422);
         }
 
-        // Try login with email
         $credentials = [
             'email' => $request->emailUsername,
             'password' => $request->password
