@@ -18,11 +18,11 @@
 
     <!-- Chat Container -->
     <section class="py-6 bg-gray-50 min-h-screen">
-        <div class="max-w-7xl mx-auto px-6">
+        <div class="mx-auto px-6">
             <div class="bg-white rounded-lg shadow-sm overflow-hidden flex" style="height: 80vh;">
                 
                 <!-- Chat List Sidebar -->
-                <div class="w-1/3 border-r border-gray-200 flex flex-col">
+                <div class="w-1/4 border-r border-gray-200 flex flex-col">
                     <!-- Sidebar Header -->
                     <div class="p-4 border-b border-gray-200">
                         <h2 class="text-xl font-semibold text-gray-900">Pesan</h2>
